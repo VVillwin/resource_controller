@@ -16,6 +16,7 @@
   <modules>
     <module>Request</module>
     <module>Response</module>
+    <module>Role</module>
   </modules>
 
   <name>commons</name>
