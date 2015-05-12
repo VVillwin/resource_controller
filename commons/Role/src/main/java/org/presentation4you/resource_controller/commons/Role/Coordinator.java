@@ -4,4 +4,8 @@ public class Coordinator extends Role {
     public boolean canGetUserInfo() {
         return true;
     }
+
+    public boolean canManageResources() {
+        return true;
+    }
 }

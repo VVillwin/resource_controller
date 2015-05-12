@@ -1,22 +1,45 @@
 package org.presentation4you.resource_controller.commons.Response;
 
-public class Response implements IResponse {
-    protected String errorMessage;
-    protected int    status;
+enum ResponseStatus {
+    OK("OK"),
+    NOT_VALID("The request is not valid"),
+    NOT_FOUND("The request has not been found"),
+    ALREADY_HAS("The repository has already contained the item");
 
-    Response() {
-        status = 0;
+    private final String name;
+
+    private ResponseStatus(final String name) {
+        this.name = name;
+    }
+
+    public String toString() {
+        return name;
+    }
+}
+
+public class Response implements IResponse {
+    protected ResponseStatus status;
+
+    public Response() {
+        status = ResponseStatus.OK;
     }
 
     public boolean isOk() {
-        if (status != 0) {
+        if (status != ResponseStatus.OK) {
             return false;
         }
         return true;
     }
 
     public void setIsNotValid() {
-        errorMessage = "notValid";
-        status = 1;
+        status = ResponseStatus.NOT_VALID;
+    }
+
+    public void setIsNotFound() {
+        status = ResponseStatus.NOT_FOUND;
+    }
+
+    public void setAlreadyHas() {
+        status = ResponseStatus.ALREADY_HAS;
     }
 }
