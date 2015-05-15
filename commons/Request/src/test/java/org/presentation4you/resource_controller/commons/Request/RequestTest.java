@@ -7,6 +7,7 @@ import org.presentation4you.resource_controller.commons.Response.GetUserInfoResp
 import org.presentation4you.resource_controller.commons.Response.IResponse;
 import org.presentation4you.resource_controller.commons.Response.ResponseStatus;
 import org.presentation4you.resource_controller.commons.Role.Coordinator;
+import org.presentation4you.resource_controller.commons.Role.Employee;
 import org.presentation4you.resource_controller.commons.Role.IRole;
 import org.presentation4you.resource_controller.server.Repository.FakeRepository;
 import org.presentation4you.resource_controller.server.Repository.IRepository;
@@ -39,8 +40,7 @@ public class RequestTest {
 
     @Test
     public void canSetRepository() {
-        IRole role = new Coordinator();
-        IRequest request = new GetUserInfoReq(role, login);
+        IRequest request = new GetUserInfoReq(new Coordinator(), login);
         IRepository repo = new FakeRepository();
 
         request.setRepository(repo);
@@ -64,13 +64,23 @@ public class RequestTest {
     @Test
     public void canReturnNotFoundIfUserDoesNotExist() {
         repo.setLogin("admin1");
-        repo.setEmail("admin1@ya.ru");
         Request request = new GetUserInfoReq(new Coordinator(), login);
         request.setRepository(repo);
 
         IResponse response = request.exec();
 
         assertEquals(response.getStatus(), ResponseStatus.NOT_FOUND);
+    }
+
+    @Test
+    public void canReturnNotValidForGetUserInfoReqIfRoleIsEmployee() {
+        repo.setLogin(login);
+        Request request = new GetUserInfoReq(new Employee(), login);
+        request.setRepository(repo);
+
+        IResponse response = request.exec();
+
+        assertEquals(response.getStatus(), ResponseStatus.NOT_VALID);
     }
 
     @Test
@@ -100,6 +110,16 @@ public class RequestTest {
         response = request.exec();
 
         assertEquals(response.getStatus(), ResponseStatus.ALREADY_HAS);
+    }
+
+    @Test
+    public void canReturnNotValidForAddResourceReqIfRoleIsEmployee() {
+        Request request = new AddResourceReq(new Employee(), 1);
+        request.setRepository(repo);
+
+        IResponse response = request.exec();
+
+        assertEquals(response.getStatus(), ResponseStatus.NOT_VALID);
     }
 
     @Test
@@ -138,10 +158,18 @@ public class RequestTest {
         assertEquals(response.getStatus(), ResponseStatus.NOT_FOUND);
     }
 
-    private Request createAddResourceReq(int id, String type) {
-        IRole role = new Coordinator();
+    @Test
+    public void canReturnNotValidForRemoveResourceReqIfRoleIsEmployee() {
+        Request request = new RemoveResourceReq(new Employee(), 1);
+        request.setRepository(repo);
 
-        Request request = new AddResourceReq(role, id);
+        IResponse response = request.exec();
+
+        assertEquals(response.getStatus(), ResponseStatus.NOT_VALID);
+    }
+
+    private Request createAddResourceReq(int id, String type) {
+        Request request = new AddResourceReq(new Coordinator(), id);
         request.setRepository(repo);
 
         return request;
