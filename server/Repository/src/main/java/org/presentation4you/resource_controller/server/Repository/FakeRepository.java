@@ -44,6 +44,17 @@ public class FakeRepository implements IRepository {
         return response;
     }
 
+    public IResponse removeResource(int id) {
+        IResponse response = new Response();
+        if (resources.containsKey(id)) {
+            resources.remove(id);
+            return response;
+        }
+
+        response.setIsNotFound();
+        return response;
+    }
+
     public boolean doesContainResource(Integer id) {
         return resources.containsKey(id);
     }

@@ -1,27 +1,14 @@
 package org.presentation4you.resource_controller.commons.Response;
 
-enum ResponseStatus {
-    OK("OK"),
-    NOT_VALID("The request is not valid"),
-    NOT_FOUND("The request has not been found"),
-    ALREADY_HAS("The repository has already contained the item");
-
-    private final String name;
-
-    private ResponseStatus(final String name) {
-        this.name = name;
-    }
-
-    public String toString() {
-        return name;
-    }
-}
-
 public class Response implements IResponse {
     protected ResponseStatus status;
 
     public Response() {
         status = ResponseStatus.OK;
+    }
+
+    public ResponseStatus getStatus() {
+        return status;
     }
 
     public boolean isOk() {
