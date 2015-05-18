@@ -11,6 +11,7 @@ public class Response implements IResponse {
         return status;
     }
 
+    @Override
     public boolean isOk() {
         if (status != ResponseStatus.OK) {
             return false;
@@ -18,15 +19,28 @@ public class Response implements IResponse {
         return true;
     }
 
+    @Override
     public void setIsNotValid() {
         status = ResponseStatus.NOT_VALID;
     }
 
+    @Override
     public void setIsNotFound() {
         status = ResponseStatus.NOT_FOUND;
     }
 
+    @Override
     public void setAlreadyHas() {
         status = ResponseStatus.ALREADY_HAS;
+    }
+
+    @Override
+    public void setHasConflict() {
+        status = ResponseStatus.HAS_CONFLICT;
+    }
+
+    @Override
+    public void setRepoWrapperError() {
+        status = ResponseStatus.REPOWRAPPER_ERROR;
     }
 }

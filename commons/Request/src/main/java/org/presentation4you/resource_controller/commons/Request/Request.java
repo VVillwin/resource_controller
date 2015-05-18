@@ -1,17 +1,17 @@
 package org.presentation4you.resource_controller.commons.Request;
 
 import org.presentation4you.resource_controller.commons.Role.IRole;
-import org.presentation4you.resource_controller.server.Repository.IRepository;
+import org.presentation4you.resource_controller.server.Repository.IRepositoryWrapper;
 
 public abstract class Request implements IRequest {
-    protected IRepository repo;
+    protected IRepositoryWrapper repo;
     protected IRole role;
 
-    public IRepository getRepository() {
+    public IRepositoryWrapper getRepository() {
         return repo;
     }
 
-    public void setRepository(IRepository repo) {
+    public void setRepository(IRepositoryWrapper repo) {
         this.repo = repo;
     }
 

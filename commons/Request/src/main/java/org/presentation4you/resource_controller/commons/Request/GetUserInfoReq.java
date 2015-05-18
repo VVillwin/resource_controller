@@ -20,11 +20,19 @@ public class GetUserInfoReq extends Request {
     }
 
     public IResponse exec() {
+        IResponse response;
         if (! isValid()) {
-            IResponse response = new Response();
+            response = new Response();
             response.setIsNotValid();
             return response;
         }
-        return repo.getUserInfo(login);
+        try {
+            response = repo.getUserInfo(login);
+        } catch (NullPointerException npe) {
+            response = new Response();
+            response.setRepoWrapperError();
+        }
+
+        return response;
     }
 }

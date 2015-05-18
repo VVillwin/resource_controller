@@ -6,4 +6,6 @@ public interface IResponse {
     void setIsNotValid();
     void setIsNotFound();
     void setAlreadyHas();
+    void setHasConflict();
+    void setRepoWrapperError();
 }
