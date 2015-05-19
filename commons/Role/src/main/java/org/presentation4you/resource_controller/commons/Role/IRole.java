@@ -6,4 +6,5 @@ public interface IRole {
     IRole setLogin(final String login);
     boolean canGetUserInfo();
     boolean canManageResources();
+    boolean canUpdateRequests();
 }

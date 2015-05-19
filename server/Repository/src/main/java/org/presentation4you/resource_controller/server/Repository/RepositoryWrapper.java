@@ -116,6 +116,22 @@ public class RepositoryWrapper implements IRepositoryWrapper {
     }
 
     @Override
+    public IResponse updateRequest(final int id, final boolean isApproved) {
+        if (requestRepo == null) {
+            throw new NullPointerException();
+        }
+
+        IResponse response = new Response();
+        if (requestRepo.has(id)) {
+            requestRepo.update(id, isApproved);
+            return response;
+        }
+
+        response.setIsNotFound();
+        return response;
+    }
+
+    @Override
     public String getRequestOwner(final int id) {
         if (requestRepo == null) {
             throw new NullPointerException();

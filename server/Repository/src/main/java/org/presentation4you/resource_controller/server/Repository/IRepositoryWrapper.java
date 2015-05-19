@@ -11,8 +11,9 @@ public interface IRepositoryWrapper {
     IResponse getUserInfo(final String login);
     IResponse addResource(final int id, final String type);
     IResponse removeResource(final int id);
+    String getRequestOwner(final int id);
     IResponse addRequest(final int resourceId, final Calendar from,
                          final Calendar to, final String login);
     IResponse removeRequest(final int id);
-    String getRequestOwner(final int id);
+    IResponse updateRequest(final int id, final boolean isApproved);
 }
