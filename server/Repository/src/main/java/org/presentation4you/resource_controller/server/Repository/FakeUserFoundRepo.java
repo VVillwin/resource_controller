@@ -7,7 +7,13 @@ public class FakeUserFoundRepo implements IUserRepo {
         this.email = email;
     }
 
-    public String get(final String login) {
+    @Override
+    public String getEmail(final String login) {
         return email;
+    }
+
+    @Override
+    public String authorize(String login, String password) {
+        return "Employee";
     }
 }

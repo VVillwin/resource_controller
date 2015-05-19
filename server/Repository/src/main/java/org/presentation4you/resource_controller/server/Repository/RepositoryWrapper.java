@@ -1,10 +1,10 @@
 package org.presentation4you.resource_controller.server.Repository;
 
-import org.presentation4you.resource_controller.commons.Response.AddRequestResp;
-import org.presentation4you.resource_controller.commons.Response.GetUserInfoResp;
-import org.presentation4you.resource_controller.commons.Response.IResponse;
-import org.presentation4you.resource_controller.commons.Response.Response;
+import org.presentation4you.resource_controller.commons.Response.*;
+
 import java.util.Calendar;
+
+import static org.presentation4you.resource_controller.commons.Response.LoginUserResp.buildLoginUserResp;
 
 public class RepositoryWrapper implements IRepositoryWrapper {
     private IUserRepo userRepo;
@@ -36,7 +36,7 @@ public class RepositoryWrapper implements IRepositoryWrapper {
         }
 
         GetUserInfoResp response = new GetUserInfoResp();
-        String email = userRepo.get(login);
+        String email = userRepo.getEmail(login);
         if (email == null) {
             response.setIsNotFound();
         } else {
@@ -128,6 +128,17 @@ public class RepositoryWrapper implements IRepositoryWrapper {
         }
 
         response.setIsNotFound();
+        return response;
+    }
+
+    @Override
+    public IResponse loginUser(final String login, final String password) {
+        if (userRepo == null) {
+            throw new NullPointerException();
+        }
+
+        String role = userRepo.authorize(login, password);
+        IResponse response = buildLoginUserResp(login, password, role);
         return response;
     }
 

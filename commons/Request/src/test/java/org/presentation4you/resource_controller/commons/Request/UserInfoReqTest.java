@@ -4,20 +4,20 @@ import org.junit.After;
 import org.junit.Test;
 import org.presentation4you.resource_controller.commons.Response.GetUserInfoResp;
 import org.presentation4you.resource_controller.commons.Response.IResponse;
+import org.presentation4you.resource_controller.commons.Response.LoginUserResp;
 import org.presentation4you.resource_controller.commons.Response.ResponseStatus;
 import org.presentation4you.resource_controller.commons.Role.Coordinator;
 import org.presentation4you.resource_controller.commons.Role.Employee;
 import org.presentation4you.resource_controller.commons.Role.IRole;
-import org.presentation4you.resource_controller.server.Repository.FakeUserFoundRepo;
-import org.presentation4you.resource_controller.server.Repository.FakeUserNotFoundRepo;
-import org.presentation4you.resource_controller.server.Repository.IRepositoryWrapper;
-import org.presentation4you.resource_controller.server.Repository.RepositoryWrapper;
+import org.presentation4you.resource_controller.server.Repository.*;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class UserInfoReqTest {
     private IRepositoryWrapper repo;
     private final String login = "admin";
+    private final String password = "pass";
     private final String email = "admin@ya.ru";
 
     @After
@@ -76,5 +76,49 @@ public class UserInfoReqTest {
         IResponse response = request.exec();
 
         assertEquals(response.getStatus(), ResponseStatus.NOT_VALID);
+    }
+
+    @Test
+    public void canReturnOkIfLoginIsSuccessful() {
+        repo = new RepositoryWrapper().setUserRepo(new FakeUserFoundRepo(email));
+        Request request = new LoginUserReq(login, password);
+        request.setRepository(repo);
+
+        IResponse response = request.exec();
+
+        assertTrue(response.isOk());
+    }
+
+    @Test
+    public void canReturnNotFoundIfLoginIsNotSuccessful() {
+        repo = new RepositoryWrapper().setUserRepo(new FakeUserNotFoundRepo());
+        Request request = new LoginUserReq(login, password);
+        request.setRepository(repo);
+
+        IResponse response = request.exec();
+
+        assertEquals(response.getStatus(), ResponseStatus.NOT_FOUND);
+    }
+
+    @Test
+    public void canReturnEmployeeIfLoginIsSuccessful() {
+        repo = new RepositoryWrapper().setUserRepo(new FakeUserFoundRepo(email));
+        Request request = new LoginUserReq(login, password);
+        request.setRepository(repo);
+
+        LoginUserResp response = (LoginUserResp) request.exec();
+
+        assertEquals(response.getRole().getClass(), Employee.class);
+    }
+
+    @Test
+    public void canReturnCoordinatorIfLoginIsSuccessful() {
+        repo = new RepositoryWrapper().setUserRepo(new FakeCoordinatorFoundRepo());
+        Request request = new LoginUserReq(login, password);
+        request.setRepository(repo);
+
+        LoginUserResp response = (LoginUserResp) request.exec();
+
+        assertEquals(response.getRole().getClass(), Coordinator.class);
     }
 }

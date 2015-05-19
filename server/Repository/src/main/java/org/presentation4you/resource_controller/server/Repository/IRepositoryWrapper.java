@@ -16,4 +16,5 @@ public interface IRepositoryWrapper {
                          final Calendar to, final String login);
     IResponse removeRequest(final int id);
     IResponse updateRequest(final int id, final boolean isApproved);
+    IResponse loginUser(final String login, final String password);
 }

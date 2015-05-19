@@ -1,13 +1,13 @@
 package org.presentation4you.resource_controller.server.Repository;
 
-public class FakeUserNotFoundRepo implements IUserRepo {
+public class FakeCoordinatorFoundRepo implements IUserRepo {
     @Override
-    public String getEmail(final String login) {
+    public String getEmail(String login) {
         return null;
     }
 
     @Override
     public String authorize(String login, String password) {
-        return null;
+        return "Coordinator";
     }
 }
