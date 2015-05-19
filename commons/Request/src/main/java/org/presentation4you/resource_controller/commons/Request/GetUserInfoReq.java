@@ -1,7 +1,6 @@
 package org.presentation4you.resource_controller.commons.Request;
 
 import org.presentation4you.resource_controller.commons.Response.IResponse;
-import org.presentation4you.resource_controller.commons.Response.Response;
 import org.presentation4you.resource_controller.commons.Role.IRole;
 
 public class GetUserInfoReq extends Request {
@@ -20,19 +19,13 @@ public class GetUserInfoReq extends Request {
     }
 
     public IResponse exec() {
-        IResponse response;
-        if (! isValid()) {
-            response = new Response();
-            response.setIsNotValid();
-            return response;
-        }
-        try {
-            response = repo.getUserInfo(login);
-        } catch (NullPointerException npe) {
-            response = new Response();
-            response.setRepoWrapperError();
-        }
+        return super.execute(new GetUserInfoRunnableReq());
+    }
 
-        return response;
+    private class GetUserInfoRunnableReq implements IRunnableReq {
+        @Override
+        public IResponse run() {
+            return repo.getUserInfo(login);
+        }
     }
 }
