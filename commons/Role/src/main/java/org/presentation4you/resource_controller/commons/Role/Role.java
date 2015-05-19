@@ -11,4 +11,9 @@ public abstract class Role implements IRole {
     public String getPassword() {
         return password;
     }
+
+    public IRole setLogin(final String login) {
+        this.login = login;
+        return this;
+    }
 }

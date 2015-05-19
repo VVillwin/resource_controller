@@ -13,4 +13,6 @@ public interface IRepositoryWrapper {
     IResponse removeResource(final int id);
     IResponse addRequest(final int resourceId, final Calendar from,
                          final Calendar to, final String login);
+    IResponse removeRequest(final int id);
+    String getRequestOwner(final int id);
 }
