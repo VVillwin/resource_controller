@@ -14,7 +14,7 @@ import org.presentation4you.resource_controller.server.Repository.RepositoryWrap
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class ResourceReqTest {
+public class FakeResourceReqTest {
     private IRepositoryWrapper repo;
 
     @After

@@ -14,7 +14,7 @@ import org.presentation4you.resource_controller.server.Repository.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class UserInfoReqTest {
+public class FakeUserInfoReqTest {
     private IRepositoryWrapper repo;
     private final String login = "admin";
     private final String password = "pass";

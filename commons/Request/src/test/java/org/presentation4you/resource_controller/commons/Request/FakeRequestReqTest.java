@@ -18,7 +18,7 @@ import java.util.Date;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class RequestReqTest {
+public class FakeRequestReqTest {
     private static final int ID = 1;
     final private String DATE_TO_TEST = "14/06/2015 14:30";
     private IRepositoryWrapper repo;
