@@ -1,6 +1,7 @@
 package org.presentation4you.resource_controller.commons.Response;
 
 public enum ResponseStatus {
+    INITIAL("INITIAL"),
     OK("OK"),
     NOT_VALID("The request is not valid"),
     REPOWRAPPER_ERROR("The request has not been processed due to internal error"),

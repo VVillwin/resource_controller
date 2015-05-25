@@ -86,7 +86,27 @@ public class IntegrationTestsRepository implements IResourceRepo {
 
     @Override
     public void remove(int id) {
+        try {
+            con = DriverManager.getConnection(url, user, password);
 
+            pst = con.prepareStatement("DELETE FROM `resources` WHERE resId=?;");
+
+            pst.setInt(1, id);
+            pst.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            try {
+                if (pst != null) {
+                    pst.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
     }
 
     @Override

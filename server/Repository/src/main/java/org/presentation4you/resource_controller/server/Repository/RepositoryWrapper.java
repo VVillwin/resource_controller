@@ -46,6 +46,7 @@ public class RepositoryWrapper implements IRepositoryWrapper {
         if (email == null) {
             response.setIsNotFound();
         } else {
+            response.setIsOk();
             response.setLogin(login);
             response.setEmail(email);
         }
@@ -64,6 +65,7 @@ public class RepositoryWrapper implements IRepositoryWrapper {
             typeId = resourceRepo.getType(type);
         } catch (NoSuchElementException nse) {
             response.setIsNotFound();
+            return response;
         }
 
         if (resourceRepo.has(id)) {
@@ -71,6 +73,7 @@ public class RepositoryWrapper implements IRepositoryWrapper {
             return response;
         }
         resourceRepo.add(id, typeId);
+        response.setIsOk();
         return response;
     }
 
@@ -83,6 +86,7 @@ public class RepositoryWrapper implements IRepositoryWrapper {
         IResponse response = new Response();
         if (resourceRepo.has(id)) {
             resourceRepo.remove(id);
+            response.setIsOk();
             return response;
         }
 
@@ -102,6 +106,7 @@ public class RepositoryWrapper implements IRepositoryWrapper {
              if (requestRepo.canAdd(resourceId, from, to, login)) {
                  int id = requestRepo.add(resourceId, from, to, login);
                  response = new AddRequestResp(id);
+                 response.setIsOk();
              } else {
                  response.setAlreadyHas();
              }
@@ -121,6 +126,7 @@ public class RepositoryWrapper implements IRepositoryWrapper {
         IResponse response = new Response();
         if (requestRepo.has(id)) {
             requestRepo.remove(id);
+            response.setIsOk();
             return response;
         }
 
@@ -137,6 +143,7 @@ public class RepositoryWrapper implements IRepositoryWrapper {
         IResponse response = new Response();
         if (requestRepo.has(id)) {
             requestRepo.update(id, isApproved);
+            response.setIsOk();
             return response;
         }
 

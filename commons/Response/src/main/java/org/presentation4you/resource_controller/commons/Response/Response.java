@@ -4,7 +4,7 @@ public class Response implements IResponse {
     protected ResponseStatus status;
 
     public Response() {
-        status = ResponseStatus.OK;
+        status = ResponseStatus.INITIAL;
     }
 
     public ResponseStatus getStatus() {
@@ -17,6 +17,11 @@ public class Response implements IResponse {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void setIsOk() {
+        status = ResponseStatus.OK;
     }
 
     @Override

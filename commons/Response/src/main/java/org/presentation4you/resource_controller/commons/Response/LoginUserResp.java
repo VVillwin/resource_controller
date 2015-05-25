@@ -31,5 +31,6 @@ public class LoginUserResp extends Response {
 
     private LoginUserResp(final IRole role) {
         this.role = role;
+        super.setIsOk();
     }
 }
