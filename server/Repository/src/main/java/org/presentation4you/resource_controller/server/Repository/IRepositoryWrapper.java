@@ -8,6 +8,7 @@ public interface IRepositoryWrapper {
     IRepositoryWrapper setUserRepo(final IUserRepo userRepo);
     IRepositoryWrapper setResourceRepo(final IResourceRepo resourceRepo);
     IRepositoryWrapper setRequestRepo(final IRequestRepo requestRepo);
+    IResourceRepo getResourceRepo();
     IResponse getUserInfo(final String login);
     IResponse addResource(final int id, final String type);
     IResponse removeResource(final int id);

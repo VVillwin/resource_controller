@@ -7,9 +7,10 @@ public class AddResourceReq extends Request {
     private int id;
     private String type;
 
-    public AddResourceReq(IRole role, final int id) {
+    public AddResourceReq(IRole role, final int id, final String type) {
         this.role = role;
         this.id = id;
+        this.type = type;
     }
 
     public boolean isValid() {

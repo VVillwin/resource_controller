@@ -3,6 +3,7 @@ package org.presentation4you.resource_controller.server.Repository;
 import org.presentation4you.resource_controller.commons.Response.*;
 
 import java.util.Calendar;
+import java.util.NoSuchElementException;
 
 import static org.presentation4you.resource_controller.commons.Response.LoginUserResp.buildLoginUserResp;
 
@@ -30,6 +31,11 @@ public class RepositoryWrapper implements IRepositoryWrapper {
     }
 
     @Override
+    public IResourceRepo getResourceRepo() {
+        return resourceRepo;
+    }
+
+    @Override
     public IResponse getUserInfo(final String login) {
         if (userRepo == null) {
             throw new NullPointerException();
@@ -53,11 +59,18 @@ public class RepositoryWrapper implements IRepositoryWrapper {
         }
 
         IResponse response = new Response();
+        int typeId = 0;
+        try {
+            typeId = resourceRepo.getType(type);
+        } catch (NoSuchElementException nse) {
+            response.setIsNotFound();
+        }
+
         if (resourceRepo.has(id)) {
             response.setAlreadyHas();
             return response;
         }
-        resourceRepo.add(id, type);
+        resourceRepo.add(id, typeId);
         return response;
     }
 

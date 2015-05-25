@@ -2,7 +2,7 @@ package org.presentation4you.resource_controller.server.Repository;
 
 import java.util.NoSuchElementException;
 
-public class FakeResourceIsNotPresentRepo implements IResourceRepo {
+public class FakeResourceTypeIsNotPresentRepo implements IResourceRepo {
     @Override
     public boolean has(int id) {
         return false;
@@ -18,6 +18,6 @@ public class FakeResourceIsNotPresentRepo implements IResourceRepo {
 
     @Override
     public int getType(String type) throws NoSuchElementException {
-        return 1;
+        throw new NoSuchElementException();
     }
 }
