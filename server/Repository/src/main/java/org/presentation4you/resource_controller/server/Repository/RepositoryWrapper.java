@@ -40,7 +40,6 @@ public class RepositoryWrapper implements IRepositoryWrapper {
         if (userRepo == null) {
             throw new NullPointerException();
         }
-
         GetUserInfoResp response = new GetUserInfoResp();
         String email = userRepo.getEmail(login);
         if (email == null) {

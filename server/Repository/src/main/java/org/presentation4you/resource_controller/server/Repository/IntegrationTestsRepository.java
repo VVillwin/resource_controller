@@ -3,7 +3,7 @@ package org.presentation4you.resource_controller.server.Repository;
 import java.sql.*;
 import java.util.NoSuchElementException;
 
-public class IntegrationTestsRepository implements IResourceRepo {
+public class IntegrationTestsRepository implements IResourceRepo, IUserRepo {
     private Connection con = null;
     private Statement st = null;
     private PreparedStatement pst = null;
@@ -178,5 +178,75 @@ public class IntegrationTestsRepository implements IResourceRepo {
                 System.out.println(ex.getMessage());
             }
         }
+    }
+
+    @Override
+    public String getEmail(String login) {
+        String email = null;
+        try {
+            con = DriverManager.getConnection(url, user, password);
+
+            pst = con.prepareStatement("SELECT email FROM users WHERE login=?;");
+            pst.setString(1, login);
+
+            rs = pst.executeQuery();
+
+            if (rs.next()) {
+                email = rs.getString(1);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pst != null) {
+                    pst.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+        return email;
+    }
+
+    @Override
+    public String authorize(String login, String pass) {
+        String group = null;
+        try {
+            con = DriverManager.getConnection(url, user, password);
+
+            pst = con.prepareStatement("SELECT g.`group` FROM `groups` g, `users` u " +
+                    "WHERE u.`groupId`=g.`gId` AND u.`login`=? AND u.`pass`=?;");
+            pst.setString(1, login);
+            pst.setString(2, pass);
+
+            rs = pst.executeQuery();
+
+            if (rs.next()) {
+                group = rs.getString(1);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pst != null) {
+                    pst.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+        return group;
     }
 }
