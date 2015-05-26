@@ -76,6 +76,7 @@ public class RequestsFields {
 
     public RequestsFields setIsApproved(boolean isApproved) {
         this.isApproved = isApproved;
+        setLookForIsApproved(true);
         return this;
     }
 
@@ -92,7 +93,7 @@ public class RequestsFields {
         return lookForIsApproved;
     }
 
-    public void setLookForIsApproved(boolean lookForIsApproved) {
+    private void setLookForIsApproved(boolean lookForIsApproved) {
         this.lookForIsApproved = lookForIsApproved;
     }
 }

@@ -18,12 +18,17 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class ResourceReqTest {
-    private static final String PROJECTOR = "Projector";
+    public static final String PROJECTOR = "Projector";
     private IRole defaultRole = new Coordinator().setLogin("admin")
                                                  .setPassword("admin");
     private IntegrationTestsRepository itr = new IntegrationTestsRepository();
     private IRepositoryWrapper repo = new RepositoryWrapper()
                                 .setResourceRepo(itr);
+    private final int resId = 1;
+
+    public int getResId() {
+        return resId;
+    }
 
     @Before
     public void prepareTestDB() {
@@ -37,7 +42,7 @@ public class ResourceReqTest {
 
     @Test
     public void canReturnOkIfResourceHasBeenAdded() {
-        Request request = createAddResourceReq(1, PROJECTOR);
+        Request request = createAddResourceReq(resId, PROJECTOR);
 
         IResponse response = request.exec();
 
@@ -46,7 +51,6 @@ public class ResourceReqTest {
 
     @Test
     public void canAddResource() {
-        int resId = 1;
         Request request = createAddResourceReq(resId, PROJECTOR);
 
         request.exec();
@@ -56,7 +60,7 @@ public class ResourceReqTest {
 
     @Test
     public void canReturnNotFoundIfResourceTypeHasNotFound() {
-        Request request = createAddResourceReq(1, "Tomato");
+        Request request = createAddResourceReq(resId, "Tomato");
 
         IResponse response = request.exec();
 
@@ -65,7 +69,7 @@ public class ResourceReqTest {
 
     @Test
     public void canReturnAlreadyHasIfResourceHasNotBeenAdded() {
-        Request request = createAddResourceReq(1, PROJECTOR);
+        Request request = createAddResourceReq(resId, PROJECTOR);
         request.exec();
 
         IResponse response = request.exec();
@@ -75,7 +79,7 @@ public class ResourceReqTest {
 
     @Test
     public void canReturnNotValidForAddResourceReqIfRoleIsEmployee() {
-        Request request = new AddResourceReq(new Employee(), 1, PROJECTOR);
+        Request request = new AddResourceReq(new Employee(), resId, PROJECTOR);
         request.setRepository(repo);
 
         IResponse response = request.exec();
@@ -85,10 +89,9 @@ public class ResourceReqTest {
 
     @Test
     public void canReturnOkIfResourceHasBeenRemoved() {
-        final int id = 1;
-        Request addRequest = createAddResourceReq(id, PROJECTOR);
+        Request addRequest = createAddResourceReq(resId, PROJECTOR);
         addRequest.exec();
-        Request removeRequest = new RemoveResourceReq(addRequest.getRole(), id);
+        Request removeRequest = new RemoveResourceReq(addRequest.getRole(), resId);
         removeRequest.setRepository(repo);
 
         IResponse response = removeRequest.exec();
@@ -98,20 +101,19 @@ public class ResourceReqTest {
 
     @Test
     public void canRemoveResource() {
-        final int id = 1;
-        Request addRequest = createAddResourceReq(id, PROJECTOR);
+        Request addRequest = createAddResourceReq(resId, PROJECTOR);
         addRequest.exec();
-        Request removeRequest = new RemoveResourceReq(addRequest.getRole(), id);
+        Request removeRequest = new RemoveResourceReq(addRequest.getRole(), resId);
         removeRequest.setRepository(repo);
 
         removeRequest.exec();
 
-        assertFalse(itr.hasResource(id));
+        assertFalse(itr.hasResource(resId));
     }
 
     @Test
     public void canReturnNotFoundIfResourceHasNotBeenRemoved() {
-        Request request = new RemoveResourceReq(new Coordinator(), 1);
+        Request request = new RemoveResourceReq(new Coordinator(), resId);
         request.setRepository(repo);
 
         IResponse response = request.exec();
@@ -121,7 +123,7 @@ public class ResourceReqTest {
 
     @Test
     public void canReturnNotValidForRemoveResourceReqIfRoleIsEmployee() {
-        Request request = new RemoveResourceReq(new Employee(), 1);
+        Request request = new RemoveResourceReq(new Employee(), resId);
         request.setRepository(repo);
 
         IResponse response = request.exec();

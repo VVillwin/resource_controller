@@ -271,7 +271,6 @@ public class IntegrationTestsRepository implements IResourceRepo, IUserRepo, IRe
             pst.setTimestamp(5, new Timestamp(to.getTimeInMillis()));
             pst.setString(6, login);
             rs = pst.executeQuery();
-            System.out.println(pst.toString());
 
             while (rs.next()) {
                 if (rs.getInt(1) > 0) {
@@ -289,7 +288,6 @@ public class IntegrationTestsRepository implements IResourceRepo, IUserRepo, IRe
             pst.setTimestamp(5, new Timestamp(to.getTimeInMillis()));
             pst.setString(6, login);
             rs = pst.executeQuery();
-            System.out.println(pst.toString());
 
             while (rs.next()) {
                 if (rs.getInt(1) == 0) {
@@ -330,7 +328,6 @@ public class IntegrationTestsRepository implements IResourceRepo, IUserRepo, IRe
             pst.setTimestamp(3, new Timestamp(to.getTimeInMillis()));
             pst.setString(4, login);
             pst.executeUpdate();
-            System.out.println(pst.toString());
 
             pst = con.prepareStatement("SELECT reqId FROM requests r WHERE" +
                     " r.resId=? AND r.`from`=? AND r.`to`=?;");
@@ -338,7 +335,6 @@ public class IntegrationTestsRepository implements IResourceRepo, IUserRepo, IRe
             pst.setTimestamp(2, new Timestamp(from.getTimeInMillis()));
             pst.setTimestamp(3, new Timestamp(to.getTimeInMillis()));
             rs = pst.executeQuery();
-            System.out.println(pst.toString());
 
             while (rs.next()) {
                 id = rs.getInt(1);
@@ -369,7 +365,6 @@ public class IntegrationTestsRepository implements IResourceRepo, IUserRepo, IRe
             pst = con.prepareStatement("SELECT COUNT(reqId) FROM requests WHERE reqId=?;");
             pst.setInt(1, id);
             rs = pst.executeQuery();
-            System.out.println(pst.toString());
 
             while (rs.next()) {
                 if (rs.getInt(1) > 0) {
@@ -405,7 +400,6 @@ public class IntegrationTestsRepository implements IResourceRepo, IUserRepo, IRe
 
             pst.setInt(1, id);
             pst.executeUpdate();
-            System.out.println(pst.toString());
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         } finally {
@@ -432,7 +426,6 @@ public class IntegrationTestsRepository implements IResourceRepo, IUserRepo, IRe
                     "u.uId=r.uId AND r.reqId=?;");
             pst.setInt(1, id);
             rs = pst.executeQuery();
-            System.out.println(pst.toString());
 
             if (rs.next()) {
                 login = rs.getString(1);
@@ -467,7 +460,6 @@ public class IntegrationTestsRepository implements IResourceRepo, IUserRepo, IRe
             pst.setBoolean(1, isApproved);
             pst.setInt(2, id);
             pst.executeUpdate();
-            System.out.println(pst.toString());
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         } finally {
@@ -493,7 +485,6 @@ public class IntegrationTestsRepository implements IResourceRepo, IUserRepo, IRe
             pst = con.prepareStatement(prepareTemplateForStatement(match));
             fillInTemplate(match);
             rs = pst.executeQuery();
-            System.out.println(pst.toString());
 
             while (rs.next()) {
                 RequestsFields gotRequest = new RequestsFields();
@@ -504,6 +495,7 @@ public class IntegrationTestsRepository implements IResourceRepo, IUserRepo, IRe
                 gotRequest.setResourceId(rs.getInt(5));
                 gotRequest.setResourceType(rs.getString(6));
                 gotRequest.setIsApproved(rs.getBoolean(7));
+                requests.add(gotRequest);
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
@@ -553,7 +545,7 @@ public class IntegrationTestsRepository implements IResourceRepo, IUserRepo, IRe
                 "resource_types rt WHERE rq.resId=re.resId AND u.uId=rq.uId AND re.typeId=rt.typeId" +
                 "";
         if (match.getResourceId() != 0) {
-            st += " AND re.resId=?";
+            st += " AND rq.resId=?";
         }
         if (match.getResourceType() != null) {
             st += " AND rt.resource_type=?";

@@ -1,5 +1,6 @@
 package org.presentation4you.resource_controller.server.Receiver;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.presentation4you.resource_controller.commons.Request.*;
@@ -20,29 +21,32 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
 public class RequestReqTest {
     private static final String PROJECTOR = "Projector";
     private static final int ID = 1;
-    final private String DATE_TO_TEST = "14/06/2015 14:30";
+    private final String DATE_TO_TEST = "14/06/2015 14:30";
+    private final String DATE_TO_TEST2 = "14/06/2015 15:30";
     private IRole defaultRole = new Employee().setLogin("user")
                                               .setPassword("user");
     private IRole admin = new Coordinator().setLogin("admin").setPassword("admin");
     private IntegrationTestsRepository itr = new IntegrationTestsRepository();
     private IRepositoryWrapper repo = new RepositoryWrapper().setRequestRepo(itr);
 
+    private ResourceReqTest resourceTest = new ResourceReqTest();
 
     @Before
     public void prepareTestDB() {
         itr.deleteAll();
     }
 
-    /*@After
+    @After
     public void deleteAll() {
         itr.deleteAll();
-    }*/
+    }
 
     @Test
     public void canReturnOkIfRequestHasBeenAdded() {
@@ -138,16 +142,56 @@ public class RequestReqTest {
 
     @Test
     public void canGetOneRequest() {
-        AddRequestResp addReqResponse = (AddRequestResp) getIResponseAfterAddedRequestReq(ID, DATE_TO_TEST);
+        resourceTest.canAddResource();
+        int resId = resourceTest.getResId();
+        getIResponseAfterAddedRequestReq(resId, DATE_TO_TEST);
         RequestsFields match = new RequestsFields().setLogin(defaultRole.getLogin())
-                                                   .setResourceId(addReqResponse.getId());
+                                                   .setResourceId(resId);
         IRequest request = new GetRequestsReq(defaultRole, match);
         request.setRepository(repo);
 
         GetRequestsResp response = (GetRequestsResp) request.exec();
         RequestsFields gotRequest = response.getRequests().get(0);
 
-        assertEquals(ID, gotRequest.getResourceId());
+        assertEquals(resId, gotRequest.getResourceId());
+    }
+
+    @Test
+    public void canGetSeveralRequests() {
+        resourceTest.canAddResource();
+        int resId = resourceTest.getResId();
+        getIResponseAfterAddedRequestReq(resId, DATE_TO_TEST);
+        getIResponseAfterAddedRequestReq(resId, DATE_TO_TEST2);
+        RequestsFields match = new RequestsFields().setLogin(defaultRole.getLogin())
+                                                    .setResourceId(resId);
+        IRequest request = new GetRequestsReq(defaultRole, match);
+        request.setRepository(repo);
+
+        GetRequestsResp response = (GetRequestsResp) request.exec();
+
+        List<RequestsFields> gotRequests = response.getRequests();
+        for (RequestsFields gotRequest : gotRequests) {
+            assertEquals(defaultRole.getLogin(), gotRequest.getLogin());
+            assertEquals(resId, gotRequest.getResourceId());
+        }
+    }
+
+    @Test
+    public void canGetRequestByFullMatch() {
+        resourceTest.canAddResource();
+        int resId = resourceTest.getResId();
+        getIResponseAfterAddedRequestReq(resId, DATE_TO_TEST);
+        RequestsFields match = new RequestsFields().setLogin(defaultRole.getLogin())
+                .setResourceId(resId).setFrom(buildCalendarFromString(DATE_TO_TEST))
+                .setTo(buildCalendarFromString(DATE_TO_TEST2))
+                .setIsApproved(false).setResourceType(resourceTest.PROJECTOR);
+        IRequest request = new GetRequestsReq(defaultRole, match);
+        request.setRepository(repo);
+
+        GetRequestsResp response = (GetRequestsResp) request.exec();
+        RequestsFields gotRequest = response.getRequests().get(0);
+
+        assertEquals(resId, gotRequest.getResourceId());
     }
 
     private IResponse getIResponseAfterAddedRequestReq(final int resourceId, final String dateFrom) {
