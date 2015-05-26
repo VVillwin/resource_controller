@@ -3,6 +3,7 @@ package org.presentation4you.resource_controller.server.Repository;
 import org.presentation4you.resource_controller.commons.RequestsFields.RequestsFields;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -261,7 +262,7 @@ public class IntegrationTestsRepository implements IResourceRepo, IUserRepo, IRe
             con = DriverManager.getConnection(url, user, password);
 
             pst = con.prepareStatement("SELECT COUNT(reqId) FROM requests r WHERE" +
-                    " r.resId=? AND isApproved=1 AND NOT (r.`from` BETWEEN ? and ? OR r.`to`" +
+                    " r.resId=? AND isApproved=1 AND (r.`from` BETWEEN ? and ? OR r.`to`" +
                     " BETWEEN ? and ?) AND r.uId<>(SELECT u.uId FROM users u WHERE u.login=?);");
             pst.setInt(1, resourceId);
             pst.setTimestamp(2, new Timestamp(from.getTimeInMillis()));
@@ -279,7 +280,7 @@ public class IntegrationTestsRepository implements IResourceRepo, IUserRepo, IRe
             }
 
             pst = con.prepareStatement("SELECT COUNT(reqId) FROM requests r WHERE" +
-                    " r.resId=? AND isApproved=1 AND NOT (r.`from` BETWEEN ? and ? OR r.`to`" +
+                    " r.resId=? AND isApproved=1 AND (r.`from` BETWEEN ? and ? OR r.`to`" +
                     " BETWEEN ? and ?) AND r.uId=(SELECT u.uId FROM users u WHERE u.login=?);");
             pst.setInt(1, resourceId);
             pst.setTimestamp(2, new Timestamp(from.getTimeInMillis()));
@@ -458,11 +459,119 @@ public class IntegrationTestsRepository implements IResourceRepo, IUserRepo, IRe
 
     @Override
     public void updateRequest(int id, boolean isApproved) {
+        try {
+            con = DriverManager.getConnection(url, user, password);
 
+            pst = con.prepareStatement("UPDATE `requests` SET isApproved=? WHERE reqId=?;");
+
+            pst.setBoolean(1, isApproved);
+            pst.setInt(2, id);
+            pst.executeUpdate();
+            System.out.println(pst.toString());
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            try {
+                if (pst != null) {
+                    pst.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
     }
 
     @Override
     public List<RequestsFields> getRequests(RequestsFields match) {
-        return null;
+        List<RequestsFields> requests = new ArrayList<>();
+        try {
+            con = DriverManager.getConnection(url, user, password);
+
+            pst = con.prepareStatement(prepareTemplateForStatement(match));
+            fillInTemplate(match);
+            rs = pst.executeQuery();
+            System.out.println(pst.toString());
+
+            while (rs.next()) {
+                RequestsFields gotRequest = new RequestsFields();
+                gotRequest.setId(rs.getInt(1));
+                gotRequest.setLogin(rs.getString(2));
+                gotRequest.setFrom(rs.getTimestamp(3));
+                gotRequest.setTo(rs.getTimestamp(4));
+                gotRequest.setResourceId(rs.getInt(5));
+                gotRequest.setResourceType(rs.getString(6));
+                gotRequest.setIsApproved(rs.getBoolean(7));
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pst != null) {
+                    pst.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+        return requests;
+    }
+
+    private void fillInTemplate(RequestsFields match) throws SQLException {
+        int column = 1;
+        if (match.getResourceId() != 0) {
+            pst.setInt(column++, match.getResourceId());
+        }
+        if (match.getResourceType() != null) {
+            pst.setString(column++, match.getResourceType());
+        }
+        if (match.getFrom() != null) {
+            pst.setTimestamp(column++, new Timestamp(match.getFrom().getTimeInMillis()));
+        }
+        if (match.getTo() != null) {
+            pst.setTimestamp(column++, new Timestamp(match.getTo().getTimeInMillis()));
+        }
+        if (match.lookForIsApproved() == true) {
+            pst.setBoolean(column++, match.getIsApproved());
+        }
+        if (match.getLogin() != null) {
+            pst.setString(column++, match.getLogin());
+        }
+    }
+
+    private String prepareTemplateForStatement(RequestsFields match) {
+        String st = "SELECT rq.reqId, u.login, rq.`from`, rq.`to`, rq.resId, " +
+                "rt.resource_type, rq.isApproved FROM requests rq, resources re, users u, " +
+                "resource_types rt WHERE rq.resId=re.resId AND u.uId=rq.uId AND re.typeId=rt.typeId" +
+                "";
+        if (match.getResourceId() != 0) {
+            st += " AND re.resId=?";
+        }
+        if (match.getResourceType() != null) {
+            st += " AND rt.resource_type=?";
+        }
+        if (match.getFrom() != null) {
+            st += " AND rq.`from`=?";
+        }
+        if (match.getTo() != null) {
+            st += " AND rq.`to`=?";
+        }
+        if (match.lookForIsApproved()) {
+            st += " AND rq.isApproved=?";
+        }
+        if (match.getLogin() != null) {
+            st += " AND u.login=?";
+        }
+
+        st += ";";
+        return st;
     }
 }

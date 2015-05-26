@@ -1,15 +1,17 @@
 package org.presentation4you.resource_controller.commons.RequestsFields;
 
+import java.sql.Timestamp;
 import java.util.Calendar;
 
 public class RequestsFields {
-    private int id;
+    private int id = 0;
     private String login;
     private Calendar from;
     private Calendar to;
-    private int resourceId;
+    private int resourceId = 0;
     private String resourceType;
-    private boolean isApproved;
+    private boolean lookForIsApproved = false;
+    private boolean isApproved = false;
 
     public String getLogin() {
         return login;
@@ -25,7 +27,13 @@ public class RequestsFields {
     }
 
     public RequestsFields setFrom(Calendar from) {
-        this.from = from;
+        this.from = (Calendar) from.clone();
+        return this;
+    }
+
+    public RequestsFields setFrom(Timestamp from) {
+        this.from = Calendar.getInstance();
+        this.from.setTimeInMillis(from.getTime());
         return this;
     }
 
@@ -34,7 +42,13 @@ public class RequestsFields {
     }
 
     public RequestsFields setTo(Calendar to) {
-        this.to = to;
+        this.to = (Calendar) to.clone();
+        return this;
+    }
+
+    public RequestsFields setTo(Timestamp to) {
+        this.to = Calendar.getInstance();
+        this.to.setTimeInMillis(to.getTime());
         return this;
     }
 
@@ -56,7 +70,7 @@ public class RequestsFields {
         return this;
     }
 
-    public boolean isApproved() {
+    public boolean getIsApproved() {
         return isApproved;
     }
 
@@ -72,5 +86,13 @@ public class RequestsFields {
     public RequestsFields setId(int id) {
         this.id = id;
         return this;
+    }
+
+    public boolean lookForIsApproved() {
+        return lookForIsApproved;
+    }
+
+    public void setLookForIsApproved(boolean lookForIsApproved) {
+        this.lookForIsApproved = lookForIsApproved;
     }
 }
