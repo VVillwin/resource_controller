@@ -6,6 +6,7 @@ public interface IRole {
 
     String getLogin();
     String getPassword();
+    String getRoleName();
     IRole setLogin(final String login);
     IRole setPassword(final String password);
     boolean canGetUserInfo();

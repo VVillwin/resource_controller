@@ -1,6 +1,10 @@
 package org.presentation4you.resource_controller.commons.Role;
 
 public class Employee extends Role {
+    public Employee() {
+        setRoleName(IRole.EMPLOYEE);
+    }
+
     @Override
     public boolean canGetUserInfo() {
         return false;

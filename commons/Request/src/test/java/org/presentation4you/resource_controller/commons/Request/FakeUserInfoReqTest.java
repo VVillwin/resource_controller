@@ -16,9 +16,12 @@ import static org.junit.Assert.assertTrue;
 
 public class FakeUserInfoReqTest {
     private IRepositoryWrapper repo;
-    private final String login = "admin";
+    private final String login = "user";
     private final String password = "pass";
-    private final String email = "admin@ya.ru";
+    private final String email = "user@ya.ru";
+    private IRole employee = new Employee().setLogin("user")
+            .setPassword("user");
+    private IRole defaultRole = new Coordinator().setLogin("admin").setPassword("admin");
 
     @After
     public void removeFakeRepository() {
@@ -27,16 +30,14 @@ public class FakeUserInfoReqTest {
 
     @Test
     public void canInitiateWithRole() {
-        IRole role = new Coordinator();
+        Request request = new GetUserInfoReq(defaultRole, login);
 
-        Request request = new GetUserInfoReq(role, login);
-
-        assertEquals(role, request.getRole());
+        assertEquals(defaultRole, request.getRole());
     }
 
     @Test
     public void canSetRepository() {
-        IRequest request = new GetUserInfoReq(new Coordinator(), login);
+        IRequest request = new GetUserInfoReq(defaultRole, login);
         IRepositoryWrapper repo = new RepositoryWrapper();
 
         request.setRepository(repo);
@@ -47,7 +48,7 @@ public class FakeUserInfoReqTest {
     @Test
     public void canGetUserInfo() {
         repo = new RepositoryWrapper().setUserRepo(new FakeUserFoundRepo(email));
-        Request request = new GetUserInfoReq(new Coordinator(), login);
+        Request request = new GetUserInfoReq(defaultRole, login);
         request.setRepository(repo);
 
         GetUserInfoResp response = (GetUserInfoResp) request.exec();
@@ -59,7 +60,7 @@ public class FakeUserInfoReqTest {
     @Test
     public void canReturnNotFoundIfUserDoesNotExist() {
         repo = new RepositoryWrapper().setUserRepo(new FakeUserNotFoundRepo());
-        Request request = new GetUserInfoReq(new Coordinator(), login);
+        Request request = new GetUserInfoReq(defaultRole, login);
         request.setRepository(repo);
 
         IResponse response = request.exec();
@@ -70,7 +71,7 @@ public class FakeUserInfoReqTest {
     @Test
     public void canReturnNotValidForGetUserInfoReqIfRoleIsEmployee() {
         repo = new RepositoryWrapper().setUserRepo(new FakeUserFoundRepo(email));
-        Request request = new GetUserInfoReq(new Employee(), login);
+        Request request = new GetUserInfoReq(employee, login);
         request.setRepository(repo);
 
         IResponse response = request.exec();

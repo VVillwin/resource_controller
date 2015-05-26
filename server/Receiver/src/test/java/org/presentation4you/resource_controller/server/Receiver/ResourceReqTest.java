@@ -19,11 +19,11 @@ import static org.junit.Assert.assertTrue;
 
 public class ResourceReqTest {
     public static final String PROJECTOR = "Projector";
-    private IRole defaultRole = new Coordinator().setLogin("admin")
-                                                 .setPassword("admin");
+    private IRole employee = new Employee().setLogin("user").setPassword("user");
+    private IRole defaultRole = new Coordinator().setLogin("admin").setPassword("admin");
     private IntegrationTestsRepository itr = new IntegrationTestsRepository();
     private IRepositoryWrapper repo = new RepositoryWrapper()
-                                .setResourceRepo(itr);
+                                .setResourceRepo(itr).setUserRepo(itr);
     private final int resId = 1;
 
     public int getResId() {
@@ -79,7 +79,7 @@ public class ResourceReqTest {
 
     @Test
     public void canReturnNotValidForAddResourceReqIfRoleIsEmployee() {
-        Request request = new AddResourceReq(new Employee(), resId, PROJECTOR);
+        Request request = new AddResourceReq(employee, resId, PROJECTOR);
         request.setRepository(repo);
 
         IResponse response = request.exec();
@@ -113,7 +113,7 @@ public class ResourceReqTest {
 
     @Test
     public void canReturnNotFoundIfResourceHasNotBeenRemoved() {
-        Request request = new RemoveResourceReq(new Coordinator(), resId);
+        Request request = new RemoveResourceReq(defaultRole, resId);
         request.setRepository(repo);
 
         IResponse response = request.exec();
@@ -123,7 +123,7 @@ public class ResourceReqTest {
 
     @Test
     public void canReturnNotValidForRemoveResourceReqIfRoleIsEmployee() {
-        Request request = new RemoveResourceReq(new Employee(), resId);
+        Request request = new RemoveResourceReq(employee, resId);
         request.setRepository(repo);
 
         IResponse response = request.exec();

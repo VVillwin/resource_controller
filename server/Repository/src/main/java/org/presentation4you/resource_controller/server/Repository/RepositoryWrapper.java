@@ -1,10 +1,7 @@
 package org.presentation4you.resource_controller.server.Repository;
 
 import org.presentation4you.resource_controller.commons.RequestsFields.RequestsFields;
-import org.presentation4you.resource_controller.commons.Response.AddRequestResp;
-import org.presentation4you.resource_controller.commons.Response.GetUserInfoResp;
-import org.presentation4you.resource_controller.commons.Response.IResponse;
-import org.presentation4you.resource_controller.commons.Response.Response;
+import org.presentation4you.resource_controller.commons.Response.*;
 
 import java.util.Calendar;
 import java.util.List;
@@ -158,8 +155,16 @@ public class RepositoryWrapper implements IRepositoryWrapper {
         }
 
         String role = userRepo.authorize(login, password);
-        IResponse response = buildLoginUserResp(login, password, role);
-        return response;
+        return buildLoginUserResp(login, password, role);
+    }
+
+    @Override
+    public String verifyCredentials(String login, String password) {
+        if (userRepo == null) {
+            throw new NullPointerException();
+        }
+
+        return userRepo.authorize(login, password);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package org.presentation4you.resource_controller.commons.Request;
 
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.presentation4you.resource_controller.commons.Response.IResponse;
 import org.presentation4you.resource_controller.commons.Response.ResponseStatus;
@@ -22,7 +23,14 @@ public class FakeRequestReqTest {
     private static final int ID = 1;
     final private String DATE_TO_TEST = "14/06/2015 14:30";
     private IRepositoryWrapper repo;
-    private IRole role = new Employee().setLogin("user");
+    private IRole defaultRole = new Employee().setLogin("user")
+            .setPassword("user");
+    private IRole admin = new Coordinator().setLogin("admin").setPassword("admin");
+
+    @Before
+    public void createFakeRepository() {
+        repo = new RepositoryWrapper();
+    }
 
     @After
     public void removeFakeRepository() {
@@ -31,7 +39,8 @@ public class FakeRequestReqTest {
 
     @Test
     public void canReturnOkIfRequestHasBeenAdded() {
-        repo = new RepositoryWrapper().setRequestRepo(new FakeResourceIsFreeRequestRepo());
+        repo.setRequestRepo(new FakeResourceIsFreeRequestRepo())
+                .setUserRepo(new FakeUserFoundRepo("user@unn.ru"));
         IResponse response = getIResponseAfterAddedRequestReq(ID, DATE_TO_TEST);
 
         assertTrue(response.isOk());
@@ -39,7 +48,8 @@ public class FakeRequestReqTest {
 
     @Test
     public void canReturnAlreadyHasIfRequestHasNotBeenAdded() {
-        repo = new RepositoryWrapper().setRequestRepo(new FakeDuplicatedRequestRepo());
+        repo.setRequestRepo(new FakeDuplicatedRequestRepo())
+                .setUserRepo(new FakeUserFoundRepo("user@unn.ru"));
         IResponse response = getIResponseAfterAddedRequestReq(ID, DATE_TO_TEST);
 
         assertEquals(response.getStatus(), ResponseStatus.ALREADY_HAS);
@@ -47,7 +57,8 @@ public class FakeRequestReqTest {
 
     @Test
     public void canReturnHasConflictIfRequestHasNotBeenAdded() {
-        repo = new RepositoryWrapper().setRequestRepo(new FakeRequestHasConflictRepo());
+        repo.setRequestRepo(new FakeRequestHasConflictRepo())
+                .setUserRepo(new FakeUserFoundRepo("user@unn.ru"));
         IResponse response = getIResponseAfterAddedRequestReq(ID, DATE_TO_TEST);
 
         assertEquals(response.getStatus(), ResponseStatus.HAS_CONFLICT);
@@ -55,8 +66,9 @@ public class FakeRequestReqTest {
 
     @Test
     public void canReturnOkIfRequestHasBeenRemoved() {
-        repo = new RepositoryWrapper().setRequestRepo(new FakeResourceIsFreeRequestRepo());
-        IRequest request = new RemoveRequestReq(role, ID);
+        repo.setRequestRepo(new FakeResourceIsFreeRequestRepo())
+                .setUserRepo(new FakeUserFoundRepo("user@unn.ru"));
+        IRequest request = new RemoveRequestReq(defaultRole, ID);
         request.setRepository(repo);
 
         IResponse response = request.exec();
@@ -66,7 +78,8 @@ public class FakeRequestReqTest {
 
     @Test
     public void canReturnNotValidForRemoveRequestIfRoleIsNotStoredOwner() {
-        repo = new RepositoryWrapper().setRequestRepo(new FakeRequestHasConflictRepo());
+        repo.setRequestRepo(new FakeRequestHasConflictRepo())
+                .setUserRepo(new FakeUserFoundRepo("user@unn.ru"));
         Request request = new RemoveResourceReq(new Employee().setLogin("NoSuchUser"), ID);
         request.setRepository(repo);
 
@@ -77,8 +90,9 @@ public class FakeRequestReqTest {
 
     @Test
     public void canReturnOkIfRequestHasBeenUpdated() {
-        repo = new RepositoryWrapper().setRequestRepo(new FakeResourceIsFreeRequestRepo());
-        IRequest request = new UpdateRequestReq(new Coordinator(), ID, true);
+        repo.setRequestRepo(new FakeResourceIsFreeRequestRepo())
+                .setUserRepo(new FakeCoordinatorFoundRepo());
+        IRequest request = new UpdateRequestReq(admin, ID, true);
         request.setRepository(repo);
 
         IResponse response = request.exec();
@@ -88,8 +102,9 @@ public class FakeRequestReqTest {
 
     @Test
     public void canReturnNotFoundIfRequestHasNotBeenUpdated() {
-        repo = new RepositoryWrapper().setRequestRepo(new FakeResourceIsFreeRequestRepo());
-        IRequest request = new UpdateRequestReq(new Coordinator(), ID + 1, true);
+        repo.setRequestRepo(new FakeResourceIsFreeRequestRepo())
+                .setUserRepo(new FakeCoordinatorFoundRepo());
+        IRequest request = new UpdateRequestReq(admin, ID + 1, true);
         request.setRepository(repo);
 
         IResponse response = request.exec();
@@ -99,8 +114,9 @@ public class FakeRequestReqTest {
 
     @Test
     public void canReturnNotValidForUpdateRequestIfRoleIsEmployee() {
-        repo = new RepositoryWrapper().setRequestRepo(new FakeRequestHasConflictRepo());
-        Request request = new UpdateRequestReq(role, ID, true);
+        repo.setRequestRepo(new FakeRequestHasConflictRepo())
+                .setUserRepo(new FakeUserFoundRepo("user@unn.ru"));
+        Request request = new UpdateRequestReq(defaultRole, ID, true);
         request.setRepository(repo);
 
         IResponse response = request.exec();
@@ -133,7 +149,7 @@ public class FakeRequestReqTest {
 
     private Request createAddRequestReq(final int resourceId, final Calendar from,
                                         final Calendar to) {
-        Request request = new AddRequestReq(role, resourceId, from, to);
+        Request request = new AddRequestReq(defaultRole, resourceId, from, to);
         request.setRepository(repo);
 
         return request;

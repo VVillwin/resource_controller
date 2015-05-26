@@ -19,5 +19,6 @@ public interface IRepositoryWrapper {
     IResponse removeRequest(final int id);
     IResponse updateRequest(final int id, final boolean isApproved);
     IResponse loginUser(final String login, final String password);
+    String verifyCredentials(final String login, final String password);
     IResponse getRequests(final RequestsFields match);
 }

@@ -14,6 +14,13 @@ public class GetRequestsReq extends Request {
 
     @Override
     public boolean isValid() {
+        try {
+            if (!super.isValid()) {
+                return false;
+            }
+        } catch (NullPointerException npe) {
+            return false;
+        }
         return true;
     }
 

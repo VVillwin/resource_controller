@@ -14,10 +14,21 @@ public abstract class Request implements IRequest {
     protected IRepositoryWrapper repo;
     protected IRole role;
 
+    @Override
+    public boolean isValid() throws NullPointerException {
+        String group = repo.verifyCredentials(role.getLogin(), role.getPassword());
+        if (group.equals(role.getRoleName())) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public IRepositoryWrapper getRepository() {
         return repo;
     }
 
+    @Override
     public void setRepository(IRepositoryWrapper repo) {
         this.repo = repo;
     }

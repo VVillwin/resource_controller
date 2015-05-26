@@ -34,7 +34,7 @@ public class RequestReqTest {
                                               .setPassword("user");
     private IRole admin = new Coordinator().setLogin("admin").setPassword("admin");
     private IntegrationTestsRepository itr = new IntegrationTestsRepository();
-    private IRepositoryWrapper repo = new RepositoryWrapper().setRequestRepo(itr);
+    private IRepositoryWrapper repo = new RepositoryWrapper().setRequestRepo(itr).setUserRepo(itr);
 
     private ResourceReqTest resourceTest = new ResourceReqTest();
 

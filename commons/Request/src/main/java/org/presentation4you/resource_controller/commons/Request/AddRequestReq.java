@@ -19,6 +19,13 @@ public class AddRequestReq extends Request {
     }
 
     public boolean isValid() {
+        try {
+            if (!super.isValid()) {
+                return false;
+            }
+        } catch (NullPointerException npe) {
+            return false;
+        }
         return true;
     }
 

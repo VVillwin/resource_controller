@@ -8,6 +8,9 @@ public class FakeUserNotFoundRepo implements IUserRepo {
 
     @Override
     public String authorize(String login, String password) {
+        if (login.equals("admin")) {
+            return "Coordinator";
+        }
         return null;
     }
 }

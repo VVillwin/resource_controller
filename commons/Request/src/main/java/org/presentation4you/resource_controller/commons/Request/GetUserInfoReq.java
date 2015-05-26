@@ -12,6 +12,14 @@ public class GetUserInfoReq extends Request {
     }
 
     public boolean isValid() {
+        try {
+            if (!super.isValid()) {
+                return false;
+            }
+        } catch (NullPointerException npe) {
+            return false;
+        }
+
         if ( ! role.canGetUserInfo()) {
             return false;
         }

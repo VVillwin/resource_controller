@@ -13,6 +13,14 @@ public class RemoveRequestReq extends Request {
 
     @Override
     public boolean isValid() {
+        try {
+            if (!super.isValid()) {
+                return false;
+            }
+        } catch (NullPointerException npe) {
+            return false;
+        }
+
         return role.getLogin().equals(repo.getRequestOwner(id));
     }
 

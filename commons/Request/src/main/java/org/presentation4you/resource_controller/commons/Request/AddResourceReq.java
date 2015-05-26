@@ -14,6 +14,14 @@ public class AddResourceReq extends Request {
     }
 
     public boolean isValid() {
+        try {
+            if (!super.isValid()) {
+                return false;
+            }
+        } catch (NullPointerException npe) {
+            return false;
+        }
+
         if ( ! role.canManageResources()) {
             return false;
         }
