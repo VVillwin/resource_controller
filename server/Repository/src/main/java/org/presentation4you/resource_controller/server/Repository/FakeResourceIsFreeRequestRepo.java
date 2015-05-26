@@ -1,22 +1,25 @@
 package org.presentation4you.resource_controller.server.Repository;
 
+import org.presentation4you.resource_controller.commons.RequestsFields.RequestsFields;
+
 import java.util.Calendar;
+import java.util.List;
 
 public class FakeResourceIsFreeRequestRepo implements IRequestRepo {
     private final int id = 1;
 
     @Override
-    public boolean canAdd(int resourceId, Calendar from, Calendar to, String login) {
+    public boolean canAddRequest(int resourceId, Calendar from, Calendar to, String login) {
         return true;
     }
 
     @Override
-    public int add(int resourceId, Calendar from, Calendar to, String login) {
+    public int addRequest(int resourceId, Calendar from, Calendar to, String login) {
         return id;
     }
 
     @Override
-    public boolean has(final int id) {
+    public boolean hasRequest(final int id) {
         if (this.id == id) {
             return true;
         }
@@ -24,17 +27,22 @@ public class FakeResourceIsFreeRequestRepo implements IRequestRepo {
     }
 
     @Override
-    public void remove(final int id) {
+    public void removeRequest(final int id) {
 
     }
 
     @Override
     public String getRequestOwner(final int id) {
-        return null;
+        return "user";
     }
 
     @Override
-    public void update(int id, boolean isApproved) {
+    public void updateRequest(int id, boolean isApproved) {
 
+    }
+
+    @Override
+    public List<RequestsFields> getRequests(RequestsFields match) {
+        return null;
     }
 }

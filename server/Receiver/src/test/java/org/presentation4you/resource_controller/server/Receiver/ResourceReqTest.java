@@ -51,7 +51,7 @@ public class ResourceReqTest {
 
         request.exec();
 
-        assertTrue(itr.has(resId));
+        assertTrue(itr.hasResource(resId));
     }
 
     @Test
@@ -106,7 +106,7 @@ public class ResourceReqTest {
 
         removeRequest.exec();
 
-        assertFalse(itr.has(id));
+        assertFalse(itr.hasResource(id));
     }
 
     @Test

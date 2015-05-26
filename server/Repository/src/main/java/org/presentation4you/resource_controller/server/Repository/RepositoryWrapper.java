@@ -1,10 +1,16 @@
 package org.presentation4you.resource_controller.server.Repository;
 
-import org.presentation4you.resource_controller.commons.Response.*;
+import org.presentation4you.resource_controller.commons.RequestsFields.RequestsFields;
+import org.presentation4you.resource_controller.commons.Response.AddRequestResp;
+import org.presentation4you.resource_controller.commons.Response.GetUserInfoResp;
+import org.presentation4you.resource_controller.commons.Response.IResponse;
+import org.presentation4you.resource_controller.commons.Response.Response;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.NoSuchElementException;
 
+import static org.presentation4you.resource_controller.commons.Response.GetRequestsResp.buildGetRequestsResp;
 import static org.presentation4you.resource_controller.commons.Response.LoginUserResp.buildLoginUserResp;
 
 public class RepositoryWrapper implements IRepositoryWrapper {
@@ -61,17 +67,17 @@ public class RepositoryWrapper implements IRepositoryWrapper {
         IResponse response = new Response();
         int typeId = 0;
         try {
-            typeId = resourceRepo.getType(type);
+            typeId = resourceRepo.getResourceType(type);
         } catch (NoSuchElementException nse) {
             response.setIsNotFound();
             return response;
         }
 
-        if (resourceRepo.has(id)) {
+        if (resourceRepo.hasResource(id)) {
             response.setAlreadyHas();
             return response;
         }
-        resourceRepo.add(id, typeId);
+        resourceRepo.addResource(id, typeId);
         response.setIsOk();
         return response;
     }
@@ -83,8 +89,8 @@ public class RepositoryWrapper implements IRepositoryWrapper {
         }
 
         IResponse response = new Response();
-        if (resourceRepo.has(id)) {
-            resourceRepo.remove(id);
+        if (resourceRepo.hasResource(id)) {
+            resourceRepo.removeResource(id);
             response.setIsOk();
             return response;
         }
@@ -102,8 +108,8 @@ public class RepositoryWrapper implements IRepositoryWrapper {
 
         IResponse response = new Response();
         try {
-             if (requestRepo.canAdd(resourceId, from, to, login)) {
-                 int id = requestRepo.add(resourceId, from, to, login);
+             if (requestRepo.canAddRequest(resourceId, from, to, login)) {
+                 int id = requestRepo.addRequest(resourceId, from, to, login);
                  response = new AddRequestResp(id);
                  response.setIsOk();
              } else {
@@ -123,13 +129,8 @@ public class RepositoryWrapper implements IRepositoryWrapper {
         }
 
         IResponse response = new Response();
-        if (requestRepo.has(id)) {
-            requestRepo.remove(id);
-            response.setIsOk();
-            return response;
-        }
-
-        response.setIsNotFound();
+        requestRepo.removeRequest(id);
+        response.setIsOk();
         return response;
     }
 
@@ -140,8 +141,8 @@ public class RepositoryWrapper implements IRepositoryWrapper {
         }
 
         IResponse response = new Response();
-        if (requestRepo.has(id)) {
-            requestRepo.update(id, isApproved);
+        if (requestRepo.hasRequest(id)) {
+            requestRepo.updateRequest(id, isApproved);
             response.setIsOk();
             return response;
         }
@@ -158,6 +159,17 @@ public class RepositoryWrapper implements IRepositoryWrapper {
 
         String role = userRepo.authorize(login, password);
         IResponse response = buildLoginUserResp(login, password, role);
+        return response;
+    }
+
+    @Override
+    public IResponse getRequests(RequestsFields match) {
+        if (requestRepo == null) {
+            throw new NullPointerException();
+        }
+
+        List<RequestsFields> requests = requestRepo.getRequests(match);
+        IResponse response = buildGetRequestsResp(requests);
         return response;
     }
 

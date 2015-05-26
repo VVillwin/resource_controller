@@ -13,7 +13,7 @@ public class RemoveRequestReq extends Request {
 
     @Override
     public boolean isValid() {
-        return repo.getRequestOwner(id) == role.getLogin();
+        return role.getLogin().equals(repo.getRequestOwner(id));
     }
 
     public IResponse exec() {

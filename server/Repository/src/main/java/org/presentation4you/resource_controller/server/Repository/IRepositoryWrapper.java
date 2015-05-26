@@ -1,5 +1,6 @@
 package org.presentation4you.resource_controller.server.Repository;
 
+import org.presentation4you.resource_controller.commons.RequestsFields.RequestsFields;
 import org.presentation4you.resource_controller.commons.Response.IResponse;
 
 import java.util.Calendar;
@@ -18,4 +19,5 @@ public interface IRepositoryWrapper {
     IResponse removeRequest(final int id);
     IResponse updateRequest(final int id, final boolean isApproved);
     IResponse loginUser(final String login, final String password);
+    IResponse getRequests(final RequestsFields match);
 }

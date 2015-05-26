@@ -4,22 +4,22 @@ import java.util.NoSuchElementException;
 
 public class FakeResourceIsPresentRepo implements IResourceRepo {
     @Override
-    public boolean has(int id) {
+    public boolean hasResource(int id) {
         return true;
     }
 
     @Override
-    public void add(int id, int typeId) {
+    public void addResource(int id, int typeId) {
 
     }
 
     @Override
-    public void remove(int id) {
+    public void removeResource(int id) {
 
     }
 
     @Override
-    public int getType(String type) throws NoSuchElementException {
+    public int getResourceType(String type) throws NoSuchElementException {
         return 0;
     }
 }

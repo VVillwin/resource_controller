@@ -22,7 +22,7 @@ public class FakeRequestReqTest {
     private static final int ID = 1;
     final private String DATE_TO_TEST = "14/06/2015 14:30";
     private IRepositoryWrapper repo;
-    private IRole role = new Employee();
+    private IRole role = new Employee().setLogin("user");
 
     @After
     public void removeFakeRepository() {
@@ -61,18 +61,7 @@ public class FakeRequestReqTest {
 
         IResponse response = request.exec();
 
-        assertTrue(response.isOk());
-    }
-
-    @Test
-    public void canReturnNotFoundIfRequestHasNotBeenRemoved() {
-        repo = new RepositoryWrapper().setRequestRepo(new FakeResourceIsFreeRequestRepo());
-        Request request = new RemoveRequestReq(new Employee(), ID + 1);
-        request.setRepository(repo);
-
-        IResponse response = request.exec();
-
-        assertEquals(response.getStatus(), ResponseStatus.NOT_FOUND);
+        assertEquals(ResponseStatus.OK, response.getStatus());
     }
 
     @Test
@@ -121,7 +110,7 @@ public class FakeRequestReqTest {
 
     private IResponse getIResponseAfterAddedRequestReq(final int resourceId, final String dateFrom) {
         Calendar from = buildCalendarFromString(dateFrom);
-        Calendar to = from;
+        Calendar to = (Calendar) from.clone();
         to.add(Calendar.HOUR_OF_DAY, 1);
         Request request = createAddRequestReq(resourceId, from, to);
 
