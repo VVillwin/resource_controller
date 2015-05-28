@@ -1,6 +1,8 @@
 package org.presentation4you.resource_controller.commons.Response;
 
-public interface IResponse {
+import java.io.Serializable;
+
+public interface IResponse extends Serializable {
     ResponseStatus getStatus();
     boolean isOk();
     void setIsOk();

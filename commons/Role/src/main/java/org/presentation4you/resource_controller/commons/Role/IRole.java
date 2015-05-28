@@ -1,6 +1,8 @@
 package org.presentation4you.resource_controller.commons.Role;
 
-public interface IRole {
+import java.io.Serializable;
+
+public interface IRole extends Serializable {
     String COORDINATOR = "Coordinator";
     String EMPLOYEE    = "Employee";
 
