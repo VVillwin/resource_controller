@@ -16,6 +16,19 @@
   <name>Response</name>
   <url>http://maven.apache.org</url>
 
+  <dependencies>
+    <dependency>
+        <groupId>org.presentation4you.resource_controller</groupId>
+        <artifactId>RequestsFields</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </dependency>
+      <dependency>
+          <groupId>org.presentation4you.resource_controller</groupId>
+          <artifactId>Role</artifactId>
+          <version>1.0-SNAPSHOT</version>
+      </dependency>
+  </dependencies>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
