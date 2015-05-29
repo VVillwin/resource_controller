@@ -1,6 +1,7 @@
 package org.presentation4you.resource_controller.server.Repository;
 
 import org.presentation4you.resource_controller.commons.RequestsFields.RequestsFields;
+import org.presentation4you.resource_controller.commons.RequestsFields.ResourcesFields;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -148,6 +149,42 @@ public class IntegrationTestsRepository implements IResourceRepo, IUserRepo, IRe
             }
         }
         return typeId;
+    }
+
+    @Override
+    public List<ResourcesFields> getResources(ResourcesFields match) {
+        List<ResourcesFields> requests = new ArrayList<>();
+        try {
+            con = DriverManager.getConnection(url, user, password);
+
+            pst = con.prepareStatement(prepareGetResourcesTemplateForStatement(match));
+            fillInGetResourcesTemplate(match);
+            rs = pst.executeQuery();
+
+            while (rs.next()) {
+                ResourcesFields gotRequest = new ResourcesFields();
+                gotRequest.setId(rs.getInt(1));
+                gotRequest.setType(rs.getString(2));
+                requests.add(gotRequest);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pst != null) {
+                    pst.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+        return requests;
     }
 
     public void deleteAll() {
@@ -482,8 +519,8 @@ public class IntegrationTestsRepository implements IResourceRepo, IUserRepo, IRe
         try {
             con = DriverManager.getConnection(url, user, password);
 
-            pst = con.prepareStatement(prepareTemplateForStatement(match));
-            fillInTemplate(match);
+            pst = con.prepareStatement(prepareGetRequestsTemplateForStatement(match));
+            fillInGetRequestsTemplate(match);
             rs = pst.executeQuery();
 
             while (rs.next()) {
@@ -517,7 +554,7 @@ public class IntegrationTestsRepository implements IResourceRepo, IUserRepo, IRe
         return requests;
     }
 
-    private void fillInTemplate(RequestsFields match) throws SQLException {
+    private void fillInGetRequestsTemplate(RequestsFields match) throws SQLException {
         int column = 1;
         if (match.getResourceId() != 0) {
             pst.setInt(column++, match.getResourceId());
@@ -535,15 +572,14 @@ public class IntegrationTestsRepository implements IResourceRepo, IUserRepo, IRe
             pst.setBoolean(column++, match.getIsApproved());
         }
         if (match.getLogin() != null) {
-            pst.setString(column++, match.getLogin());
+            pst.setString(column, match.getLogin());
         }
     }
 
-    private String prepareTemplateForStatement(RequestsFields match) {
+    private String prepareGetRequestsTemplateForStatement(RequestsFields match) {
         String st = "SELECT rq.reqId, u.login, rq.`from`, rq.`to`, rq.resId, " +
                 "rt.resource_type, rq.isApproved FROM requests rq, resources re, users u, " +
-                "resource_types rt WHERE rq.resId=re.resId AND u.uId=rq.uId AND re.typeId=rt.typeId" +
-                "";
+                "resource_types rt WHERE rq.resId=re.resId AND u.uId=rq.uId AND re.typeId=rt.typeId";
         if (match.getResourceId() != 0) {
             st += " AND rq.resId=?";
         }
@@ -563,6 +599,29 @@ public class IntegrationTestsRepository implements IResourceRepo, IUserRepo, IRe
             st += " AND u.login=?";
         }
 
+        st += ";";
+        return st;
+    }
+
+    private void fillInGetResourcesTemplate(ResourcesFields match) throws SQLException {
+        int column = 1;
+        if (match.getId() != 0) {
+            pst.setInt(column++, match.getId());
+        }
+        if (match.getType() != null) {
+            pst.setString(column, match.getType());
+        }
+    }
+
+    private String prepareGetResourcesTemplateForStatement(ResourcesFields match) {
+        String st = "SELECT re.resId, rt.resource_type FROM resources re, resource_types rt " +
+                "WHERE re.typeId=rt.typeId";
+        if (match.getId() != 0) {
+            st += " AND re.resId=?";
+        }
+        if (match.getType() != null) {
+            st += " AND rt.resource_type=?";
+        }
         st += ";";
         return st;
     }

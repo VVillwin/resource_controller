@@ -14,7 +14,7 @@ public class DataManagement implements IDataManagement {
             Registry registry = LocateRegistry.getRegistry(12345);
             IReceiver stub = (IReceiver) registry.lookup("IReceiver");
             IResponse response = stub.post(request);
-            System.out.println("response: " + response.toString());
+            System.out.println("response: " + response.getStatus());
             return response;
         } catch (Exception e) {
             System.err.println("Client exception: " + e.toString());

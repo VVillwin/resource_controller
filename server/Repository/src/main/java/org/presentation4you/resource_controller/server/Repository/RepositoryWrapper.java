@@ -1,6 +1,7 @@
 package org.presentation4you.resource_controller.server.Repository;
 
 import org.presentation4you.resource_controller.commons.RequestsFields.RequestsFields;
+import org.presentation4you.resource_controller.commons.RequestsFields.ResourcesFields;
 import org.presentation4you.resource_controller.commons.Response.*;
 
 import java.util.Calendar;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.presentation4you.resource_controller.commons.Response.GetRequestsResp.buildGetRequestsResp;
+import static org.presentation4you.resource_controller.commons.Response.GetResourcesResp.buildGetResourcesResp;
 import static org.presentation4you.resource_controller.commons.Response.LoginUserResp.buildLoginUserResp;
 
 public class RepositoryWrapper implements IRepositoryWrapper {
@@ -174,8 +176,17 @@ public class RepositoryWrapper implements IRepositoryWrapper {
         }
 
         List<RequestsFields> requests = requestRepo.getRequests(match);
-        IResponse response = buildGetRequestsResp(requests);
-        return response;
+        return buildGetRequestsResp(requests);
+    }
+
+    @Override
+    public IResponse getResources(final ResourcesFields match) {
+        if (resourceRepo == null) {
+            throw new NullPointerException();
+        }
+
+        List<ResourcesFields> resources = resourceRepo.getResources(match);
+        return buildGetResourcesResp(resources);
     }
 
     @Override

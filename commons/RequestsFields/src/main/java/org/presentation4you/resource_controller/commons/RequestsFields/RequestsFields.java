@@ -1,9 +1,10 @@
 package org.presentation4you.resource_controller.commons.RequestsFields;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
-public class RequestsFields {
+public class RequestsFields implements Serializable {
     private int id = 0;
     private String login;
     private Calendar from;
