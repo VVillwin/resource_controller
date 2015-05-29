@@ -19,9 +19,23 @@ public class ResourceController {
     @FXML
     private Button btnGetResources;
     @FXML
+    private Button btnGetRequests;
+    @FXML
+    private Button btnGetPendingRequests;
+    @FXML
     private TextField txtResourceId;
     @FXML
     private TextField txtResourceType;
+    @FXML
+    private TextField txtRequestId;
+    @FXML
+    private TextField txtResIdForReq;
+    @FXML
+    private TextField txtResTypeForReq;
+    @FXML
+    private TextField txtFrom;
+    @FXML
+    private TextField txtTo;
     @FXML
     private TableView<ResourcesFields> tblResources;
 
@@ -29,6 +43,12 @@ public class ResourceController {
     public void initialize() {
         txtResourceId.textProperty().bindBidirectional(viewModel.txtResourceIdProperty());
         txtResourceType.textProperty().bindBidirectional(viewModel.txtResourceTypeProperty());
+        txtRequestId.textProperty().bindBidirectional(viewModel.txtRequestIdProperty());
+        txtResIdForReq.textProperty().bindBidirectional(viewModel.txtResIdForReqProperty());
+        txtResTypeForReq.textProperty().bindBidirectional(viewModel.txtResTypeForReqProperty());
+        txtFrom.textProperty().bindBidirectional(viewModel.txtFromProperty());
+        txtTo.textProperty().bindBidirectional(viewModel.txtToProperty());
+
         tblResources.itemsProperty().bindBidirectional(viewModel.tblGetResourcesProperty());
 
         btnAddResource.setOnAction(new EventHandler<ActionEvent>() {
@@ -49,6 +69,20 @@ public class ResourceController {
             @Override
             public void handle(final ActionEvent event) {
                 viewModel.getResources();
+            }
+        });
+
+        btnGetRequests.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(final ActionEvent event) {
+                viewModel.getRequests();
+            }
+        });
+
+        btnGetPendingRequests.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(final ActionEvent event) {
+                viewModel.getPendingRequests();
             }
         });
     }

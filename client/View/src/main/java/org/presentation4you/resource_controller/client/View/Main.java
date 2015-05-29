@@ -15,7 +15,7 @@ public class Main extends Application {
     @Override
     public void start(final Stage primaryStage) throws Exception {
         Authentication aut = Authentication.getInstance();
-        if (aut.login("user", "user") == ResponseStatus.OK) {
+        if (aut.login("admin", "admin") == ResponseStatus.OK) {
             if (aut.getRole() instanceof Coordinator) {
                 Parent root = FXMLLoader.load(getClass().getResource("ResourceController.fxml"));
                 primaryStage.setTitle("ResourceController");

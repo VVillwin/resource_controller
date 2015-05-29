@@ -39,6 +39,26 @@
         </TableView>
       </children>
     </AnchorPane>
+        <AnchorPane maxHeight="60.0" GridPane.columnIndex="0" GridPane.rowIndex="3">
+            <children>
+                <Button fx:id="btnApproveRequest" layoutX="22.0" layoutY="0.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="-1.0" text="Approve Request" />
+            </children>
+        </AnchorPane>
+        <AnchorPane maxHeight="60.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <children>
+                <TextField fx:id="txtRequestId" layoutX="0.0" layoutY="0.0" prefHeight="54.0" prefWidth="183.0" />
+                <TextField fx:id="txtResIdForReq" layoutX="191.0" layoutY="8.0" prefHeight="46.0" prefWidth="183.0" />
+                <TextField fx:id="txtFrom" layoutX="385.0" layoutY="8.0" prefHeight="46.0" prefWidth="238.0" />
+                <TextField fx:id="txtTo" layoutX="656.0" layoutY="14.0" prefHeight="46.0" prefWidth="264.0" />
+            </children>
+        </AnchorPane>
+        <AnchorPane maxHeight="60.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+            <children>
+                <TextField fx:id="txtResTypeForReq" prefHeight="46.0" prefWidth="183.0" />
+                <Button fx:id="btnGetRequests" layoutX="427.0" layoutY="0.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="-1.0" text="Get Requests" />
+                <Button fx:id="btnGetPendingRequests" layoutX="578.0" layoutY="0.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="-1.0" text="Get Pending Requests" />
+            </children>
+        </AnchorPane>
   </children>
   <columnConstraints>
     <ColumnConstraints hgrow="ALWAYS" />
