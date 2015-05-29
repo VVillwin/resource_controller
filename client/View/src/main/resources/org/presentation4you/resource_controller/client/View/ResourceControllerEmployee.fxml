@@ -10,7 +10,7 @@
     <fx:define>
         <ViewModelEmployee fx:id="viewModel" />
     </fx:define>
-    <children>
+  <children>
     <AnchorPane maxHeight="60.0" prefHeight="60.0" prefWidth="300.0">
       <children>
         <TextField fx:id="txtResourceId" prefHeight="60.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="-14.0" AnchorPane.topAnchor="0.0" />
@@ -45,10 +45,17 @@
         <TextField fx:id="txtTo" layoutX="656.0" layoutY="14.0" prefHeight="46.0" prefWidth="264.0" />
       </children>
     </AnchorPane>
+    <AnchorPane maxHeight="60.0" GridPane.columnIndex="0" GridPane.rowIndex="3">
+      <children>
+        <Button fx:id="btnAddRequest" layoutX="22.0" layoutY="0.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="-1.0" text="Add Request" />
+        <Button fx:id="btnRemoveRequest" layoutX="150.0" layoutY="0.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="-1.0" text="Remove Request" />
+      </children>
+    </AnchorPane>
     <AnchorPane maxHeight="60.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
       <children>
-        <Button fx:id="btnAddRequest" layoutX="427.0" layoutY="0.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="-1.0" text="Add Resource" />
-        <Button fx:id="btnRemoveRequest" layoutX="578.0" layoutY="0.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="-1.0" text="Remove Resource" />
+        <TextField fx:id="txtResTypeForReq" prefHeight="46.0" prefWidth="183.0" />
+        <Button fx:id="btnGetRequests" layoutX="427.0" layoutY="0.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="-1.0" text="Get Requests" />
+        <Button fx:id="btnGetOwnRequests" layoutX="578.0" layoutY="0.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="-1.0" text="Get Own Requests" />
       </children>
     </AnchorPane>
   </children>

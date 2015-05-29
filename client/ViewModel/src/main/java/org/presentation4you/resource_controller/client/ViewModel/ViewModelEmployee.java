@@ -9,11 +9,10 @@ import javafx.collections.ObservableList;
 import org.presentation4you.resource_controller.client.Authentication.Authentication;
 import org.presentation4you.resource_controller.client.RootDataManagement.DataManagement;
 import org.presentation4you.resource_controller.client.RootDataManagement.IDataManagement;
-import org.presentation4you.resource_controller.commons.Request.AddRequestReq;
-import org.presentation4you.resource_controller.commons.Request.GetResourcesReq;
-import org.presentation4you.resource_controller.commons.Request.IRequest;
-import org.presentation4you.resource_controller.commons.Request.RemoveRequestReq;
+import org.presentation4you.resource_controller.commons.Request.*;
+import org.presentation4you.resource_controller.commons.RequestsFields.RequestsFields;
 import org.presentation4you.resource_controller.commons.RequestsFields.ResourcesFields;
+import org.presentation4you.resource_controller.commons.Response.GetRequestsResp;
 import org.presentation4you.resource_controller.commons.Response.GetResourcesResp;
 import org.presentation4you.resource_controller.commons.Response.IResponse;
 import org.presentation4you.resource_controller.commons.Response.ResponseStatus;
@@ -31,6 +30,7 @@ public class ViewModelEmployee {
     private final StringProperty txtResourceType = new SimpleStringProperty();
     private final StringProperty txtRequestId = new SimpleStringProperty();
     private final StringProperty txtResIdForReq = new SimpleStringProperty();
+    private final StringProperty txtResTypeForReq = new SimpleStringProperty();
     private final StringProperty txtFrom = new SimpleStringProperty();
     private final StringProperty txtTo = new SimpleStringProperty();
     private final ObjectProperty<ObservableList<ResourcesFields>> tblResources =
@@ -46,6 +46,7 @@ public class ViewModelEmployee {
         txtResourceType.set("");
         txtRequestId.set("");
         txtResIdForReq.set("");
+        txtResTypeForReq.set("");
 
         Date now = Calendar.getInstance().getTime();
         String date = formatter.format((now));
@@ -57,11 +58,8 @@ public class ViewModelEmployee {
         Integer id;
         String type = null;
 
-        if (getTxtResourceId().equals("")) {
-            id = 0;
-        } else {
-            id = Integer.parseInt(getTxtResourceId());
-        }
+        id = getIntFromString(getTxtResourceId());
+
         if (!getTxtResourceType().equals("")) {
             type = getTxtResourceType();
         }
@@ -82,11 +80,7 @@ public class ViewModelEmployee {
     public void addRequest() {
         Integer resId = 0;
 
-        if (getTxtResIdForReq().equals("")) {
-            resId = 0;
-        } else {
-            resId = Integer.parseInt(getTxtResIdForReq());
-        }
+        resId = getIntFromString(getTxtResIdForReq());
 
         Calendar from = getCalendar(getTxtFrom());
         Calendar to = getCalendar(getTxtTo());
@@ -99,15 +93,21 @@ public class ViewModelEmployee {
     public void removeRequest() {
         Integer id = 0;
 
-        if (getTxtRequestId().equals("")) {
-            id = 0;
-        } else {
-            id = Integer.parseInt(getTxtRequestId());
-        }
+        id = getIntFromString(getTxtRequestId());
 
         IRequest request = new RemoveRequestReq(role, id);
 
         dm.send(request);
+    }
+
+    public void getRequests() {
+        RequestsFields match = new RequestsFields();
+        getRequests(match);
+    }
+
+    public void getOwnRequests() {
+        RequestsFields match = new RequestsFields().setLogin(role.getLogin());
+        getRequests(match);
     }
 
     public final String getTxtResourceId() {
@@ -128,6 +128,10 @@ public class ViewModelEmployee {
 
     public final String getTxtResIdForReq() {
         return txtResIdForReq.get();
+    }
+
+    public final String getTxtResTypeForReq() {
+        return txtResTypeForReq.get();
     }
 
     public final String getTxtFrom() {
@@ -158,12 +162,24 @@ public class ViewModelEmployee {
         return txtResIdForReq;
     }
 
+    public StringProperty txtResTypeForReqProperty() {
+        return txtResTypeForReq;
+    }
+
     public StringProperty txtFromProperty() {
         return txtFrom;
     }
 
     public StringProperty txtToProperty() {
         return txtTo;
+    }
+
+    private Integer getIntFromString(final String str) {
+        if (str.equals("")) {
+            return 0;
+        } else {
+            return Integer.parseInt(str);
+        }
     }
 
     private Calendar getCalendar(String requiredDate) {
@@ -178,4 +194,40 @@ public class ViewModelEmployee {
         calendar.setTime(date);
         return calendar;
     }
+
+    private void getRequests(RequestsFields match) {
+        if (!getTxtRequestId().equals("")) {
+            match.setId(Integer.parseInt(getTxtRequestId()));
+        }
+
+        if (!getTxtResIdForReq().equals("")) {
+            match.setResourceId(Integer.parseInt(getTxtResIdForReq()));
+        }
+
+        if (!getTxtResTypeForReq().equals("")) {
+            match.setResourceType(getTxtResTypeForReq());
+        }
+
+        if (!getTxtFrom().equals("")) {
+            match.setFrom(getCalendar(getTxtFrom()));
+        }
+        if (!getTxtTo().equals("")) {
+            match.setTo(getCalendar(getTxtTo()));
+        }
+
+        IRequest request = new GetRequestsReq(role, match);
+
+        IResponse response = dm.send(request);
+        if (response instanceof GetRequestsResp) {
+            if (response.getStatus() == ResponseStatus.OK) {
+                List<RequestsFields> requests = ((GetRequestsResp) response).getRequests();
+                for(RequestsFields req : requests) {
+                    System.out.println(req.getId() + " " + req.getLogin() + " " + req.getResourceId()
+                            + " " + req.getResourceType() + " " + formatter.format(req.getFrom().getTime())
+                            + " " + formatter.format(req.getTo().getTime())+ " " + req.getIsApproved());
+                }
+            }
+        }
+    }
+
 }

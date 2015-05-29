@@ -19,6 +19,10 @@ public class ResourceControllerEmployee {
     @FXML
     private Button btnRemoveRequest;
     @FXML
+    private Button btnGetRequests;
+    @FXML
+    private Button btnGetOwnRequests;
+    @FXML
     private TextField txtResourceId;
     @FXML
     private TextField txtResourceType;
@@ -26,6 +30,8 @@ public class ResourceControllerEmployee {
     private TextField txtRequestId;
     @FXML
     private TextField txtResIdForReq;
+    @FXML
+    private TextField txtResTypeForReq;
     @FXML
     private TextField txtFrom;
     @FXML
@@ -39,6 +45,7 @@ public class ResourceControllerEmployee {
         txtResourceType.textProperty().bindBidirectional(viewModel.txtResourceTypeProperty());
         txtRequestId.textProperty().bindBidirectional(viewModel.txtRequestIdProperty());
         txtResIdForReq.textProperty().bindBidirectional(viewModel.txtResIdForReqProperty());
+        txtResTypeForReq.textProperty().bindBidirectional(viewModel.txtResTypeForReqProperty());
         txtFrom.textProperty().bindBidirectional(viewModel.txtFromProperty());
         txtTo.textProperty().bindBidirectional(viewModel.txtToProperty());
         tblResources.itemsProperty().bindBidirectional(viewModel.tblGetResourcesProperty());
@@ -61,6 +68,20 @@ public class ResourceControllerEmployee {
             @Override
             public void handle(final ActionEvent event) {
                 viewModel.removeRequest();
+            }
+        });
+
+        btnGetRequests.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(final ActionEvent event) {
+                viewModel.getRequests();
+            }
+        });
+
+        btnGetOwnRequests.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(final ActionEvent event) {
+                viewModel.getOwnRequests();
             }
         });
     }
