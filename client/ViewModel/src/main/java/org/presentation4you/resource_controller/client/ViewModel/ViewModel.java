@@ -98,6 +98,16 @@ public class ViewModel {
         }
     }
 
+    public void approveRequest() {
+        Integer id = 0;
+
+        id = getIntFromString(getTxtRequestId());
+
+        IRequest request = new UpdateRequestReq(role, id, true);
+
+        dm.send(request);
+    }
+
     public void getRequests() {
         RequestsFields match = new RequestsFields();
         getRequests(match);

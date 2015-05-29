@@ -19,6 +19,8 @@ public class ResourceController {
     @FXML
     private Button btnGetResources;
     @FXML
+    private Button btnApproveRequest;
+    @FXML
     private Button btnGetRequests;
     @FXML
     private Button btnGetPendingRequests;
@@ -69,6 +71,13 @@ public class ResourceController {
             @Override
             public void handle(final ActionEvent event) {
                 viewModel.getResources();
+            }
+        });
+
+        btnApproveRequest.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(final ActionEvent event) {
+                viewModel.approveRequest();
             }
         });
 
