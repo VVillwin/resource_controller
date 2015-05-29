@@ -4,10 +4,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import org.presentation4you.resource_controller.client.ViewModel.ViewModel;
-import org.presentation4you.resource_controller.commons.RequestsFields.ResourcesFields;
 
 public class ResourceController {
     @FXML
@@ -38,8 +36,6 @@ public class ResourceController {
     private TextField txtFrom;
     @FXML
     private TextField txtTo;
-    @FXML
-    private TableView<ResourcesFields> tblResources;
 
     @FXML
     public void initialize() {
@@ -50,8 +46,6 @@ public class ResourceController {
         txtResTypeForReq.textProperty().bindBidirectional(viewModel.txtResTypeForReqProperty());
         txtFrom.textProperty().bindBidirectional(viewModel.txtFromProperty());
         txtTo.textProperty().bindBidirectional(viewModel.txtToProperty());
-
-        tblResources.itemsProperty().bindBidirectional(viewModel.tblGetResourcesProperty());
 
         btnAddResource.setOnAction(new EventHandler<ActionEvent>() {
             @Override

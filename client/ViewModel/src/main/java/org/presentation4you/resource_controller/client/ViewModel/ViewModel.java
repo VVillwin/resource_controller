@@ -1,11 +1,7 @@
 package org.presentation4you.resource_controller.client.ViewModel;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import org.presentation4you.resource_controller.client.Authentication.Authentication;
 import org.presentation4you.resource_controller.client.RootDataManagement.DataManagement;
 import org.presentation4you.resource_controller.client.RootDataManagement.IDataManagement;
@@ -21,6 +17,7 @@ import org.presentation4you.resource_controller.commons.Role.IRole;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -33,11 +30,8 @@ public class ViewModel {
     private final StringProperty txtResTypeForReq = new SimpleStringProperty();
     private final StringProperty txtFrom = new SimpleStringProperty();
     private final StringProperty txtTo = new SimpleStringProperty();
-    private final ObjectProperty<ObservableList<ResourcesFields>> tblResources =
-            new SimpleObjectProperty<>(FXCollections.observableArrayList());
-
-    //private final StringProperty txtLogin = new SimpleStringProperty();
-    //private final StringProperty txtPassword = new SimpleStringProperty();
+    private final StringProperty resourcesTable = new SimpleStringProperty();
+    private final StringProperty requestsTable = new SimpleStringProperty();
 
     private final IDataManagement dm = new DataManagement();
     private IRole role;
@@ -50,6 +44,9 @@ public class ViewModel {
         txtRequestId.set("");
         txtResIdForReq.set("");
         txtResTypeForReq.set("");
+
+        resourcesTable.set("");
+        requestsTable.set("");
 
         Date now = Calendar.getInstance().getTime();
         String date = formatter.format((now));
@@ -90,10 +87,16 @@ public class ViewModel {
         if (response instanceof GetResourcesResp) {
             if (response.getStatus() == ResponseStatus.OK) {
                 List<ResourcesFields> resources = ((GetResourcesResp) response).getResources();
+
+                List<String> resourcesList = new ArrayList<>();
                 for(ResourcesFields res : resources) {
-                    System.out.println(res.getId() + " " + res.getType());
+                    resourcesList.add(String.format("%d %s\n", res.getId(), res.getType()));
                 }
-                tblResources.set(FXCollections.observableList(resources));
+                String resourcesToView = "";
+                for (String s : resourcesList) {
+                    resourcesToView += s;
+                }
+                resourcesTable.set(resourcesToView);
             }
         }
     }
@@ -124,10 +127,6 @@ public class ViewModel {
 
     public final String getTxtResourceType() {
         return txtResourceType.get();
-    }
-
-    public ObservableList<ResourcesFields> getTblResources(){
-        return tblResources.get();
     }
 
     public final String getTxtRequestId() {
@@ -178,8 +177,20 @@ public class ViewModel {
         return txtResourceType;
     }
 
-    public ObjectProperty<ObservableList<ResourcesFields>> tblGetResourcesProperty() {
-        return tblResources;
+    public StringProperty resourcesTableProperty() {
+        return resourcesTable;
+    }
+
+    public final String getResourcesTable() {
+        return resourcesTable.get();
+    }
+
+    public StringProperty requestsTableProperty() {
+        return requestsTable;
+    }
+
+    public final String getRequestsTable() {
+        return requestsTable.get();
     }
 
     private Integer getIntFromString(final String str) {
@@ -229,11 +240,18 @@ public class ViewModel {
         if (response instanceof GetRequestsResp) {
             if (response.getStatus() == ResponseStatus.OK) {
                 List<RequestsFields> requests = ((GetRequestsResp) response).getRequests();
+
+                List<String> requestsList = new ArrayList<>();
                 for(RequestsFields req : requests) {
-                    System.out.println(req.getId() + " " + req.getLogin() + " " + req.getResourceId()
-                            + " " + req.getResourceType() + " " + formatter.format(req.getFrom().getTime())
-                            + " " + formatter.format(req.getTo().getTime())+ " " + req.getIsApproved());
+                    requestsList.add(String.format("%d %s %d %s %s %s %b\n", req.getId(), req.getLogin(),
+                            req.getResourceId(), req.getResourceType(), formatter.format(req.getFrom().getTime()),
+                            formatter.format(req.getTo().getTime()), req.getIsApproved()));
                 }
+                String requestsToView = "";
+                for (String s : requestsList) {
+                    requestsToView += s;
+                }
+                requestsTable.set(requestsToView);
             }
         }
     }

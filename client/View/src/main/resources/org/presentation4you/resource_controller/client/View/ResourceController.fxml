@@ -29,14 +29,14 @@
         <Button fx:id="btnGetResources" layoutX="745.0" layoutY="0.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="189.0" text="Get Resources" />
       </children>
     </AnchorPane>
+        <AnchorPane maxHeight="60.0" GridPane.columnIndex="0" GridPane.rowIndex="2">
+            <children>
+                <TextArea text="${viewModel.resourcesTable}" editable="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            </children>
+        </AnchorPane>
     <AnchorPane maxHeight="60.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
       <children>
-        <TableView fx:id="tblResources" editable="true" visible="true" layoutX="-29.0" layoutY="-70.0" prefHeight="200.0" prefWidth="200.0">
-          <columns>
-            <TableColumn editable="true" maxWidth="-1.0" minWidth="100" prefWidth="-1.0" resizable="true" sortable="true" visible="true" text="Id" />
-            <TableColumn editable="true" maxWidth="-1.0" minWidth="100" prefWidth="-1.0" resizable="true" sortable="true" visible="true" text="Type" />
-          </columns>
-        </TableView>
+          <TextArea text="${viewModel.requestsTable}" editable="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
       </children>
     </AnchorPane>
         <AnchorPane maxHeight="60.0" GridPane.columnIndex="0" GridPane.rowIndex="3">
