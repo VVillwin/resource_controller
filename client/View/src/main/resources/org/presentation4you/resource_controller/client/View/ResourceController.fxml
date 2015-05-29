@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.presentation4you.resource_controller.client.ViewModel.*?>
+
+<GridPane minHeight="600.0" minWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2"
+          fx:controller="org.presentation4you.resource_controller.client.View.ResourceController">
+    <fx:define>
+        <ViewModel fx:id="viewModel" />
+    </fx:define>
+  <children>
+    <AnchorPane maxHeight="60.0" GridPane.columnSpan="2" GridPane.rowIndex="1">
+      <children>
+        <Button fx:id="btnAddResource" mnemonicParsing="false" prefHeight="60.0" prefWidth="300.0" text="Add Resource" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="0.0" />
+      </children>
+    </AnchorPane>
+    <AnchorPane maxHeight="60.0" prefHeight="60.0" prefWidth="300.0">
+      <children>
+        <TextField fx:id="txtResourceType" prefHeight="60.0" prefWidth="224.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="86.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      </children>
+    </AnchorPane>
+    <AnchorPane maxHeight="60.0" prefHeight="60.0" prefWidth="300.0" GridPane.columnIndex="1">
+      <children>
+        <TextField fx:id="txtResourceId" prefHeight="60.0" prefWidth="231.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="262.0" AnchorPane.topAnchor="0.0" />
+      </children>
+    </AnchorPane>
+    <Button fx:id="btnRemoveResource" mnemonicParsing="false" prefHeight="60.0" prefWidth="300.0" text="Remove Resource" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+  </children>
+  <columnConstraints>
+    <ColumnConstraints hgrow="ALWAYS" />
+    <ColumnConstraints hgrow="ALWAYS" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints maxHeight="60.0" prefHeight="60.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="60.0" prefHeight="60.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="60.0" prefHeight="60.0" vgrow="SOMETIMES" />
+    <RowConstraints minHeight="150.0" prefHeight="300.0" vgrow="ALWAYS" />
+  </rowConstraints>
+</GridPane>
