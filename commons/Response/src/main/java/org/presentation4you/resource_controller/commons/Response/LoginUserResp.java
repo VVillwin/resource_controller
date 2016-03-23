@@ -5,6 +5,8 @@ import org.presentation4you.resource_controller.commons.Role.Employee;
 import org.presentation4you.resource_controller.commons.Role.IRole;
 
 public class LoginUserResp extends Response {
+    private static final long serialVersionUID = -8721506352053324984L;
+
     private IRole role;
 
     public static IResponse buildLoginUserResp(final String login, final String password,

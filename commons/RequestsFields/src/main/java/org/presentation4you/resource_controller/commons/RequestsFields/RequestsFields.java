@@ -5,6 +5,8 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 
 public class RequestsFields implements Serializable {
+    private static final long serialVersionUID = 1451621138192675811L;
+
     private int id = 0;
     private String login;
     private Calendar from;
@@ -13,6 +15,8 @@ public class RequestsFields implements Serializable {
     private String resourceType;
     private boolean lookForIsApproved = false;
     private boolean isApproved = false;
+
+
 
     public String getLogin() {
         return login;

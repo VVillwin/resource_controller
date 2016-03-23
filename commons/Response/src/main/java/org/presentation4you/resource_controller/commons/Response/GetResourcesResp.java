@@ -5,6 +5,8 @@ import org.presentation4you.resource_controller.commons.RequestsFields.Resources
 import java.util.List;
 
 public class GetResourcesResp extends Response {
+    private static final long serialVersionUID = 7964127608142370557L;
+
     private List<ResourcesFields> resources;
 
     public static IResponse buildGetResourcesResp(List<ResourcesFields> resources) {

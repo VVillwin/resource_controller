@@ -1,6 +1,8 @@
 package org.presentation4you.resource_controller.commons.Response;
 
 public class Response implements IResponse {
+    private static final long serialVersionUID = -5362880735654636512L;
+
     protected ResponseStatus status;
 
     public Response() {

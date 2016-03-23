@@ -3,6 +3,8 @@ package org.presentation4you.resource_controller.commons.RequestsFields;
 import java.io.Serializable;
 
 public class ResourcesFields implements Serializable {
+    private static final long serialVersionUID = -8381223739579239018L;
+
     private int id = 0;
     private String type;
 
